@@ -1,5 +1,3 @@
-$(function () {
-    $(document).ready( function() {
-        $('#django-message').delay(1000).fadeOut();
-    });
+$(document).ready( function() {
+    $('.django-message').delay(4000).fadeOut();
 });
