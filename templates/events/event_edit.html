@@ -4,21 +4,54 @@
 {% endblock  %}
 
 {% block body %}
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Create Event</h2>
-          {% for field in form.visible %}
-            {{ field.label }}
-            {{ field }}
-            {{ field.errors }}
-          {% endfor %}
+    <div class="container" ng-app="eventApp">
+      <script type="text/ng-template" id="day_picker.html">
+
+        <div class="form-group">
+            <label for="day" class="control-label col-xs-2">Select Day</label>
+            <div class="col-xs-10">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button ng-click="dayClick(1)" type="button" class="btn btn-default" ng-class="{active: day == 1}">Sunday</button>
+                  <button ng-click="dayClick(2)" type="button" class="btn btn-default" ng-class="{active: day == 2}">Monday</button>
+                  <button ng-click="dayClick(3)" type="button" class="btn btn-default" ng-class="{active: day == 3}">Tuesday</button>
+                  <button ng-click="dayClick(4)" type="button" class="btn btn-default" ng-class="{active: day == 4}">Wednesday</button>
+                  <button ng-click="dayClick(5)" type="button" class="btn btn-default" ng-class="{active: day == 5}">Thursday</button>
+                  <button ng-click="dayClick(6)" type="button" class="btn btn-default" ng-class="{active: day == 6}">Friday</button>
+                  <button ng-click="dayClick(7)" type="button" class="btn btn-default" ng-class="{active: day == 7}">Saturday</button>
+                  <input type="hidden" id="day" name="day" ng-model='day'>
+                </div>
+            </div>
         </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-       </div>
+        <div class="form-group">
+            <label for="time" class="control-label col-xs-2">Time</label>
+            <div class="col-xs-10">
+                  <input type="time" id="time" name="time">
+            </div>
+        </div>
+      </script>
+
+
+      <div class="row">
+        <div class="col-md-8">
+          <h2>Create Event</h2>
+
+          <form ng-controller="eventCtrl" class="form-horizontal" method="POST" action="{% url 'event-edit' pk %}">{% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.label }}" class="control-label col-xs-2">{{ field.label }}</label>
+                    <div class="col-xs-10">
+                        {{ field }}{{ field.errors }}
+                    </div>
+                </div>
+            {% endfor %}
+                <day-picker ng-hide="(occurance == undefined || occurance == '')" occurance="occurace"></day-picker>
+                <div class="form-group">
+                    <div class="col-xs-offset-2 col-xs-10">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="col-md-4">
           <h2>Heading</h2>
           <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>

@@ -20,6 +20,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Project Apps
+    'events',
     # Third Party Apps
     'pipeline',
 )
@@ -128,6 +129,11 @@ PIPELINE_JS = {
     'top-js': {
         'source_filenames': (
             'js/vendor/modernizr-2.6.2-respond-1.1.0.min.js',
+            'js/angular.min.js',
+
+            'js/events/app.js',
+            'js/events/controller.js',
+            'js/events/directive.js',
         ),
         'output_filename': 'base.min.js',
     },

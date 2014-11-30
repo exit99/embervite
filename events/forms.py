@@ -4,8 +4,22 @@ from events.models import Event, Member
 
 
 class EventForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        self.fields['occurance'].widget = forms.Select(
+            choices = self.fields['occurance'].choices,
+            attrs={
+                'ng-model': 'occurance',
+                'ng-change': 'doThat()',
+            }
+        )
+        self.fields['desc'].widget = forms.Textarea(attrs={
+            'rows': 4,
+        });
+
     class Meta:
         model = Event
+        exclude = ['user', 'days', 'follow_up_days', 'time']
 
 
 class MemberForm(forms.ModelForm):
