@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
                 ('desc', models.CharField(max_length=255, null=True, blank=True)),
-                ('occurance', models.CharField(max_length=8, choices=[(b'once', b'Once'), (b'weekly', b'Weekly'), (b'monthly', b'Monthly'), (b'yearly', b'Yearly')])),
+                ('occurance', models.CharField(max_length=8, choices=[(b'weekly', b'Weekly')])),
                 ('days', models.CommaSeparatedIntegerField(max_length=1000)),
                 ('follow_up_days', models.CommaSeparatedIntegerField(max_length=1000)),
                 ('time', models.DateTimeField()),
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Members',
+            name='Member',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('first_name', models.CharField(max_length=255)),
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='eventmember',
             name='member',
-            field=models.ForeignKey(to='events.Members'),
+            field=models.ForeignKey(to='events.Member'),
             preserve_default=True,
         ),
     ]

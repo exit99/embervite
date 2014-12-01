@@ -11,8 +11,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameModel(
-            old_name='Members',
-            new_name='Member',
+        migrations.AlterField(
+            model_name='event',
+            name='time',
+            field=models.TimeField(),
+            preserve_default=True,
         ),
     ]

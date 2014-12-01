@@ -129,6 +129,7 @@ PIPELINE_JS = {
     'top-js': {
         'source_filenames': (
             'js/vendor/modernizr-2.6.2-respond-1.1.0.min.js',
+            'js/jquery-2.1.1.min.js',
             'js/angular.min.js',
 
             'js/events/app.js',

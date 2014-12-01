@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock  %}
+
+{% block body %}
+   <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Events</h2>
+            <p><a href="{% url 'event-edit' 0 %}"><button class="btn btn-success">Create New Event</button></a></p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Occurance</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Invited</th>
+                        <th>Attending</th>
+                        <th>Not Attending</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.occurance }}</td>
+                            <td>{{ event.days }}</td>
+                            <td>{{ event.time }}</td>
+                            <td>{{ event.invited }}</td>
+                            <td>{{ event.attending }}</td>
+                            <td>{{ event.not_attending }}</td>
+                            <td><a href="{% url 'event-edit' event.pk %}"><button class="btn btn-primary">Edit</button></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+
+      <hr>
+{% endblock %}
+
+{% block footer %}
+        <p>&copy; Company 2014</p>
+{% endblock %}

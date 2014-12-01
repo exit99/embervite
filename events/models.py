@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -25,7 +27,7 @@ class Event(models.Model):
     occurance = models.CharField(max_length=8, choices=OCCURANCE_CHOICES)
     days = models.CommaSeparatedIntegerField(max_length=1000)
     follow_up_days = models.CommaSeparatedIntegerField(max_length=1000)
-    time = models.DateTimeField()
+    time = models.TimeField()
 
     def __unicode__(self):
         return self.title
@@ -41,6 +43,18 @@ class Event(models.Model):
     @property
     def not_attending(self):
         EventMember.objects.filter(event=self, attending=False).count()
+
+    @property
+    def days_json(self):
+        return json.dumps(self.days)
+
+    @property
+    def time_json(self):
+        return json.dumps(str(self.time).strip('0:'))
+
+    @property
+    def occurance_json(self):
+        return json.dumps(self.occurance)
 
 
 class Member(models.Model):
