@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock  %}
+
+{% block body %}
+   <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Members</h2>
+            <p><a href="{% url 'member-edit' 0 %}"><button class="btn btn-success">Create New Member</button></a></p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Preference</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                        <tr>
+                            <td>{{ member.full_name }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.phone }}</td>
+                            <td>{{ member.preference }}</td>
+                            <td><a href="{% url 'member-edit' member.pk %}"><button class="btn btn-primary">Edit</button></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+
+      <hr>
+{% endblock %}
+
+{% block footer %}
+        <p>&copy; Company 2014</p>
+{% endblock %}

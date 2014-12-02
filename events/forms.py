@@ -1,8 +1,9 @@
+import re
 import datetime
 
 from django import forms
 
-from events.models import Event, Member
+from events.models import Event, Member, EventMember
 from embervite.forms import pop_form_kwarg
 
 
@@ -47,22 +48,41 @@ class EventForm(forms.ModelForm):
 
 class MemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
+        self.user, kwargs = pop_form_kwarg('user', kwargs)
         self.event = forms.ChoiceField(choices=Event.objects.filter(
             user=self.user),
             required=False
         )
         super(MemberForm, self).__init__(*args, **kwargs)
+        self.fields['desc'].widget = forms.Textarea(attrs={
+            'rows': 4,
+        })
 
-    def save(self, *args, **kwargs):
-        event = self.cleaned_data.get('event')
-        if event:
-            self.cleaned_data.pop('event')
-        super(MemberForm, self).save(*args, **kwargs)
+    def clean_preference(self):
+        pref = self.cleaned_data['preference']
+        if pref == 'email' and not self.cleaned_data.get('email'):
+            raise forms.ValidationError('No email specified above.')
+        if pref == 'phone' and not self.cleaned_data.get('phone'):
+            raise forms.ValidationError('No phone specified above.')
+        return pref
 
-        member = Member.objects.filter(**self.cleaned_data).first()
-        if event and member:
-            EventMember.objects.get_or_create(event=event, member=member)
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        phone = re.sub('[()-]', '', phone)
+        if len(phone) != 10:
+            raise forms.ValidationError('Invalid phone number length.')
+        return phone
+
+    def clean_carrier(self):
+        carrier = self.cleaned_data.get('carrier')
+        if self.cleaned_data.get('phone') and not carrier:
+            raise forms.ValidationError('No carrier selected for phone.')
+        return carrier
+
+    def clean(self, *args, **kwargs):
+        self.cleaned_data['user'] = self.user
+        return self.cleaned_data
 
     class Meta:
         model = Member
+        exclude = ['user']

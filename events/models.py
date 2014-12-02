@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from embervite.constants import STATES
+from embervite.carriers import CARRIER_CHOICES
+
 
 OCCURANCE_CHOICES = (
     # ('once', 'Once'),
@@ -58,17 +60,26 @@ class Event(models.Model):
 
 
 class Member(models.Model):
+    user = models.ForeignKey(User)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     desc = models.CharField(max_length=555, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
+    carrier = models.CharField(choices=CARRIER_CHOICES, max_length=4,
+                               blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
     state = models.CharField(max_length=2, choices=STATES, blank=True,
                                null=True)
+    zip = models.IntegerField(blank=True, null=True)
     preference = models.CharField(max_length=10, choices=PREFERENCE_CHOICES)
 
     def __unicode__(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
+    @property
+    def full_name(self):
         return "{} {}".format(self.first_name, self.last_name)
 
 

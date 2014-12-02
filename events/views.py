@@ -29,8 +29,7 @@ def event_edit(request, pk):
     else:
         form = EventForm(instance=event)
     if form.is_valid():
-        # TODO when the form is submitted it can be submitted without a proper
-        # day
+        # TODO form can be submitted without a proper day
         if not event:
             Event.objects.create(**form.cleaned_data)
             messages.success(request, "New Event Created!")
@@ -38,7 +37,7 @@ def event_edit(request, pk):
             for attr, value in form.cleaned_data.iteritems():
                 setattr(event, attr, value)
             event.save()
-            messages.success(request, "Event Updated!")
+            messages.success(request, "Event Information Updated!")
         return redirect('event-list')
 
     context = {
@@ -50,19 +49,31 @@ def event_edit(request, pk):
     return render(request, 'events/event_edit.html', context)
 
 
+@login_required
+def member_list(request):
+    members = Member.objects.filter(user=request.user)
+    context = {
+        'members': members,
+    }
+    return render(request, 'events/member_list.html', context)
+
+
 def member_edit(request, pk):
     member = Member.objects.filter(pk=pk).first()
     form = MemberForm(request.POST or None, instance=member, user=request.user)
     if form.is_valid():
-        form.save()
-        messages.success(request, "New Event Created!")
-        return redirect()
+        if not member:
+            Member.objects.create(**form.cleaned_data)
+            messages.success(request, "New Member Created!")
+        else:
+            for attr, value in form.cleaned_data.iteritems():
+                setattr(member, attr, value)
+            member.save()
+            messages.success(request, "Member Information Updated!")
+        return redirect('member-list')
 
     context = {
-        'form': form
+        'form': form,
+        'pk': pk,
     }
     return render(request, 'events/member_edit.html', context)
-
-
-
-
