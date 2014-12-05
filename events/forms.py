@@ -69,7 +69,7 @@ class MemberForm(forms.ModelForm):
     def clean_phone(self):
         phone = self.cleaned_data['phone']
         phone = re.sub('[()-]', '', phone)
-        if len(phone) != 10:
+        if len(phone) not in [10, 0]:
             raise forms.ValidationError('Invalid phone number length.')
         return phone
 

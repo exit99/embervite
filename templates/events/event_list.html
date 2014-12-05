@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load event_tags %}
 
 {% block head %}
 {% endblock  %}
@@ -24,9 +25,10 @@
                         <th>Occurance</th>
                         <th>Day</th>
                         <th>Time</th>
-                        <th>Invited</th>
+                        <th>Members</th>
                         <th>Attending</th>
                         <th>Not Attending</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -35,11 +37,12 @@
                         <tr>
                             <td>{{ event.title }}</td>
                             <td>{{ event.occurance }}</td>
-                            <td>{{ event.days }}</td>
+                            <td>{{ event.days|week_day }}</td>
                             <td>{{ event.time }}</td>
                             <td>{{ event.invited }}</td>
                             <td>{{ event.attending }}</td>
                             <td>{{ event.not_attending }}</td>
+                            <td><a href="{% url 'event-add' event.pk %}"><button class="btn btn-success">Add Members</button></a></td>
                             <td><a href="{% url 'event-edit' event.pk %}"><button class="btn btn-primary">Edit</button></a></td>
                         </tr>
                     {% endfor %}

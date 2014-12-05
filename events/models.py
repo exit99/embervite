@@ -48,14 +48,20 @@ class Event(models.Model):
 
     @property
     def days_json(self):
+        if not self.days:
+            return "false"
         return json.dumps(self.days)
 
     @property
     def time_json(self):
+        if not self.time:
+            return "false"
         return json.dumps(str(self.time).strip('0:'))
 
     @property
     def occurance_json(self):
+        if not self.occurance:
+            return "false"
         return json.dumps(self.occurance)
 
 

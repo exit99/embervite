@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load event_tags %}
+
+{% block head %}
+{% endblock  %}
+
+{% block body %}
+   <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-12">
+            <h2>Add Members to <strong>{{ event.title }}</strong></h2>
+        </div>
+      </div>
+    </div>
+  
+    <div class="container" ng-app="eventApp" ng-controller="addMemberCtrl">
+      <div class="row">
+        <div class="col-md-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Selected Members: <span class="badge">{$ invited $}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                        <tr>
+                            <td>
+                                {% with  member.full_name.split|join:'_' as full_name %}
+                                <label><input ng-init="selected_members[{{ member.pk|escapejs }}] = false" ng-model="member_{{ member.pk|escapejs }}" ng-change="updateSelected({{ member.pk }})" class="td-checkbox-with-label" name="{{ full_name }}" id="{{ full_name }}" type="checkbox"/>
+                                    <span class="checkbox-label">{{ member.full_name }}</span>
+                                </label>
+                                {% endwith %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+
+      <hr>
+{% endblock %}
+
+{% block footer %}
+        <p>&copy; Company 2014</p>
+{% endblock %}

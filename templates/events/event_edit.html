@@ -2,9 +2,9 @@
 
 {% block head %}
 <script>
-    var DAYS = {{ event.days_json|safe }};
-    var TIME = {{ event.time_json|safe }};
-    var OCCURANCE = {{ event.occurance_json|safe }}; 
+    var DAYS = {% if event and event.days_json|safe %}{{ event.days_json|safe }}{% else %}0{% endif %};
+    var TIME = {% if event and event.time_json|safe %}{{ event.time_json|safe }}{% else %}0{% endif %};
+    var OCCURANCE = {% if event and event.occurance_json|safe %}{{ event.occurance_json|safe }}{% else %}0{% endif %}; 
 </script>
 {% endblock  %}
 

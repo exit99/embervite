@@ -12,6 +12,15 @@
     color: red;
 }
 
+.checkbox-label {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+input[type=checkbox] {
+    cursor: pointer;
+}
+
 
 
 
