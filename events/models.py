@@ -1,7 +1,7 @@
+import os
 import datetime
 from dateutil import parser
 import json
-import timedelta
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -161,6 +161,19 @@ class EventMember(models.Model):
     invite_sent = models.BooleanField(default=False)
     follow_up_sent = models.BooleanField(default=False)
     attending = models.NullBooleanField(blank=True, null=True)
+    unique_hash = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return "{} at {}".format(self.member, self.event)
+
+    def save(self, *args, **kwargs):
+        if not self.unique_hash:
+            self.unique_hash = self._create_hash()
+        super(EventMember, self).save(*args, **kwargs)
+
+    def _create_hash(self):
+        new_hash = os.urandom(100).encode('hex')
+        if EventMember.objects.filter(unique_hash=new_hash):
+            return _create_hash()
+        else:
+            return new_hash

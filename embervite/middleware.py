@@ -6,9 +6,11 @@ from pytz import timezone
 
 class LoginRequiredMiddleware:
     def process_request(self, request):
-        accepted = ['/', '/login/']
-        if not request.user.is_authenticated() and request.path not in accepted:
-            return redirect('index')
+        path = request.path
+        if not path.startswith('/ev/email/'):
+            accepted = ['/', '/login/']
+            if not request.user.is_authenticated() and path not in accepted:
+                return redirect('index')
 
 
 class TimeZoneMiddleware:

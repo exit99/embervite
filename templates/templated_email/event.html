@@ -1,0 +1,20 @@
+{% extends "templated_email/base.html" %}
+
+{% block headline %}Your Invited!{% endblock headline %}
+
+{% block content %}
+<p>Hi {{ event_member.member.full_name }},<br>You have been invited to {{ event_member.event.title }}<br>
+    on {{ event_member.event.event_date }} @ {{ event_member.event.location }}</p>
+    <br>
+	<p>Are you coming?</p>
+    <table>
+    	<tr>
+    		<td class="padding">
+                <p><a target="_blank" class="btn-primary" href="{% url 'email-yes' event_member.unique_hash %}">Yes</a></p>
+    		</td>
+    		<td class="padding">
+                <p><a target="_blank" class="btn-primary" href="{% url 'email-no' event_member.unique_hash %}">No</a></p>
+    		</td>
+    	</tr>
+    </table>
+{% endblock content %}

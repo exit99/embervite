@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock  %}
+
+{% block body %}
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+          <h1>{{ event_member.event.title }}</h1>
+          <p>Date: {{ event_member.event.event_date }} @ {{ event_member.event.location }}
+        <br>
+        <br>
+        <center><h2 class="strong-header">{{ event_member.member.first_name|title }}, You are {% if not event_member.attending %}NOT {% endif %}Attending</h2></center>
+        <br>
+        <br>
+        <center>
+        {% if event_member.attending %}
+        <p><a href="{% url 'email-no' event_member.unique_hash %}" class="btn btn-error btn-lg" role="button">Cancel RSVP</a></p>
+        {% else %}
+        <p><a href="{% url 'email-yes' event_member.unique_hash %}"class="btn btn-success btn-lg" role="button">Attend this Event</a></p>
+        {% endif %}
+        </center>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+       </div>
+        <div class="col-md-4">
+        </div>
+      </div>
+
+      <hr>
+{% endblock %}
+
+{% block footer %}
+        <p>&copy; Company 2014</p>
+{% endblock %}

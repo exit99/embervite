@@ -29,6 +29,10 @@ input[type=checkbox] {
     float: right;
 }
 
+.strong-header {
+    font-weight: bold;
+}
+
 
 
 

@@ -1,0 +1,12 @@
+Hi {{ event_member.member.full_name }}
+You have been invited to {{ event_member.event.title }}
+{{ event_member.event.event_date }} @ {{ event_member.event.location }}
+
+Are you coming?
+Visit this link to confirm: 
+
+{% url 'email-yes' event_member.unique_hash %}
+
+Looking forward to seeing you!.
+
+EmberVite Application by Zach Kazanski

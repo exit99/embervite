@@ -5,10 +5,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import Http404, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from events.forms import EventForm, MemberForm
-from events.models import Event, Member
+from events.models import Event, Member, EventMember
 
 
 @login_required
@@ -129,3 +129,28 @@ def download_backup(request):
     response.write(json_members)
 
     return response
+
+
+# TODO ask Keene about a more secure way to do this
+def email_yes(request, unique_hash):
+    return _email_update(request, unique_hash, True)
+
+
+def email_no(request, unique_hash):
+    return _email_update(request, unique_hash, False)
+
+
+def _email_update(request, unique_hash, attending):
+    event_member = _update_event_member(unique_hash, attending)
+    context = {
+        'event_member': event_member
+    }
+    return render(request, 'events/confirmation.html', context)
+
+
+def _update_event_member(unique_hash, attending):
+    event_member = get_object_or_404(EventMember, unique_hash=unique_hash)
+    event_member.attending = attending
+    event_member.save()
+    return event_member
+
