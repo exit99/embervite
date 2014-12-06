@@ -138,7 +138,7 @@ class Member(models.Model):
     desc = models.CharField(max_length=555, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
-    carrier = models.CharField(choices=CARRIER_CHOICES, max_length=4,
+    carrier = models.CharField(choices=CARRIER_CHOICES, max_length=50,
                                blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)

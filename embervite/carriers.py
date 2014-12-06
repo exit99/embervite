@@ -67,4 +67,4 @@ dictionary = {
 }
 
 CARRIERS = OrderedDict(sorted(dictionary.items()))
-CARRIER_CHOICES = ((CARRIERS[item][:4], item) for item in CARRIERS.keys())
+CARRIER_CHOICES = ((CARRIERS[item], item) for item in CARRIERS.keys())
