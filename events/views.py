@@ -26,11 +26,14 @@ def event_edit(request, pk):
     if not event and pk != '0':
         raise Http404
 
-    if request.POST:
+    if request.method == "POST":
         days = request.POST.get('days')
         time = request.POST.get('time')
+        invite_day = request.POST.get('invite_day')
+        invite_time = request.POST.get('invite_time')
         form = EventForm(request.POST, instance=event, days=days, time=time,
-                         user=request.user)
+                         user=request.user, invite_day=invite_day,
+                         invite_time=invite_time)
     else:
         form = EventForm(instance=event)
     if form.is_valid():

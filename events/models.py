@@ -8,6 +8,7 @@ from django.db import models
 
 from embervite.constants import STATES
 from embervite.carriers import CARRIER_CHOICES
+from events.utils import EventDateHelper
 
 
 OCCURANCE_CHOICES = (
@@ -33,7 +34,12 @@ class Event(models.Model):
     occurance = models.CharField(max_length=8, choices=OCCURANCE_CHOICES)
     days = models.CommaSeparatedIntegerField(max_length=1000)
     time = models.TimeField()
-    send_delta = timedelta.fields.TimedeltaField()
+    invite_day = models.CommaSeparatedIntegerField(max_length=1000)
+    invite_time = models.TimeField()
+
+    def __init__(self, *args, **kwargs):
+        super(Event, self).__init__(*args, **kwargs)
+        self.helper = EventDateHelper(model=self)
 
     def __unicode__(self):
         return self.title
@@ -70,6 +76,14 @@ class Event(models.Model):
     @send_date.setter
     def send_date(self):
         self._send_date = datetime.strftime('%d %H:%M:%S')
+
+    @property
+    def event_date(self):
+        return self.helper.calc_event_date()
+
+    @property
+    def invite_date(self):
+        return self.helper.calc_invite_date()
 
     ########
     # JSON #

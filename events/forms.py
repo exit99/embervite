@@ -3,14 +3,16 @@ import datetime
 
 from django import forms
 
-from events.models import Event, Member, EventMember
+from events.models import Event, Member
 from embervite.forms import pop_form_kwarg
 
 
 class EventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.days, kwargs = pop_form_kwarg('days', kwargs)
+        self.invite_day, kwargs = pop_form_kwarg('invite_day', kwargs)
         self.time, kwargs = pop_form_kwarg('time', kwargs)
+        self.invite_time, kwargs = pop_form_kwarg('invite_time', kwargs)
         self.user, kwargs = pop_form_kwarg('user', kwargs)
 
         super(EventForm, self).__init__(*args, **kwargs)
@@ -31,11 +33,18 @@ class EventForm(forms.ModelForm):
             raise forms.ValidationError('time', "No time selected.")
         elif not self.user:
             raise forms.ValidationError('time', "You must be logged in.")
+        elif not self.invite_time:
+            raise forms.ValidationError('invite_time', "No prior time selected.")
+        elif not self.invite_day:
+            raise forms.ValidationError('invite_day', "No prior days selected.")
         else:
-            self.cleaned_data['days'] = self.days
-            self.cleaned_data['time'] = self._convert_time(self.time)
-            self.cleaned_data['user'] = self.user
-            return self.cleaned_data
+            data = self.cleaned_data
+            data['days'] = self.days
+            data['time'] = self._convert_time(self.time)
+            data['user'] = self.user
+            data['invite_day'] = self.invite_day
+            data['invite_time'] = self._convert_time(self.invite_time)
+            return data
 
     def _convert_time(self, time):
         hour_min = map(int, time.split(':'))
@@ -43,7 +52,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        exclude = ['user', 'days', 'time', 'send_delta']
+        exclude = ['user', 'days', 'time', 'invite_day', 'invite_time']
 
 
 class MemberForm(forms.ModelForm):

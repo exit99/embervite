@@ -23,8 +23,8 @@
                     <tr>
                         <th>Title</th>
                         <th>Occurance</th>
-                        <th>Day</th>
-                        <th>Time</th>
+                        <th>Event Date</th>
+                        <th>Invite Date</th>
                         <th>Invited</th>
                         <th>Attending</th>
                         <th>Not Attending</th>
@@ -37,11 +37,11 @@
                         <tr>
                             <td>{{ event.title }}</td>
                             <td>{{ event.occurance }}</td>
-                            <td>{{ event.days|week_day }}</td>
-                            <td>{{ event.time }}</td>
-                            <td>{{ event.invited }}</td>
-                            <td>{{ event.attending }}</td>
-                            <td>{{ event.not_attending }}</td>
+                            <td>{{ event.event_date }}</td>
+                            <td>{{ event.invite_date }}</td>
+                            <td><center>{{ event.invited }}</center></td>
+                            <td><center>{{ event.attending }}</center></td>
+                            <td><center>{{ event.not_attending }}</center></td>
                             <td><a href="{% url 'event-add' event.pk %}"><button class="btn btn-success">Add Members</button></a></td>
                             <td><a href="{% url 'event-edit' event.pk %}"><button class="btn btn-primary">Edit</button></a></td>
                         </tr>

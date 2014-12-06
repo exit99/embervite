@@ -10,8 +10,8 @@
 
 {% block body %}
     <div class="container" ng-app="eventApp">
-      <script type="text/ng-template" id="day_picker.html">
 
+      <script type="text/ng-template" id="day_picker.html">
         <div class="form-group">
             <div class="row">
                 <div class="col-xs-6">
@@ -62,26 +62,23 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-xs-2">
-                    <label for="time_delta" class="control-label col-xs-2">Days</label>
+                    <label for="invite_day" class="control-label col-xs-2">Days</label>
                 </div>
                 <div class="col-xs-4">
-                      <input type="number" min="1" max="7" id="time_delta_day" name="time_delta_day">
+                      <input type="number" min="1" max="6" id="invite_day" name="invite_day">
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-xs-2">
-                    <label for="time_delta" class="control-label col-xs-2">Time</label>
+                    <label for="invite_time" class="control-label col-xs-2">Time</label>
                 </div>
                 <div class="col-xs-4">
-                      <input type="time" id="time" name="time">
+                      <input type="time" id="invite_time" name="invite_time">
                 </div>
             </div>
         </div>
-
-
-
       </script>
 
 
