@@ -36,15 +36,24 @@ class Event(models.Model):
 
     @property
     def invited(self):
-        EventMember.objects.filter(event=self).count()
+        count = EventMember.objects.filter(event=self).count()
+        if not count:
+            return 0
+        return count
 
     @property
     def attending(self):
-        EventMember.objects.filter(event=self, attending=True).count()
+        count = EventMember.objects.filter(event=self, attending=True).count()
+        if not count:
+            return 0
+        return count
 
     @property
     def not_attending(self):
-        EventMember.objects.filter(event=self, attending=False).count()
+        count = EventMember.objects.filter(event=self, attending=False).count()
+        if not count:
+            return 0
+        return count
 
     @property
     def days_json(self):
@@ -63,6 +72,25 @@ class Event(models.Model):
         if not self.occurance:
             return "false"
         return json.dumps(self.occurance)
+
+    def update_members(self, primary_keys):
+        """Delete EventMember not in primary_keys.
+        Add EventMember in primary_keys. Return new count of Event Members"""
+        for event_member in EventMember.objects.filter(event=self):
+            if event_member.pk not in primary_keys:
+                event_member.delete()
+            else:
+                primary_keys.pop(event_member.pk)
+        for pk in primary_keys:
+            member = Member.objects.get(pk=pk)
+            EventMember.objects.create(member=member, event=self)
+        return self.invited
+
+    def event_members(self, pks=False):
+        event_members = EventMember.objects.filter(event=self)
+        if not pks:
+            return event_members
+        return [event_member.member.pk for event_member in event_members]
 
 
 class Member(models.Model):

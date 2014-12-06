@@ -57,13 +57,22 @@ def event_add(request, pk):
     event = Event.objects.filter(pk=pk, user=request.user).first()
     if not event and pk != '0':
         raise Http404
-    members = Member.objects.filter(user=request.user)
+    if request.method == "POST":
+        primary_keys = [v for k, v in request.POST.iteritems()
+                        if k != "csrfmiddlewaretoken" ]
+        invited = event.update_members(primary_keys)
+        msg = "{} Members are now invited to {}".format(invited, event.title)
+        messages.success(request, msg)
+        return redirect('event-list')
+
+    members = Member.objects.filter(user=request.user).order_by('first_name')
+    event_members = event.event_members(pks=True)
     context = {
         'event': event,
         'members': members,
+        'event_members': json.dumps(event_members),
     }
     return render(request, 'events/event_add.html', context)
-
 
 
 @login_required
