@@ -1,4 +1,7 @@
+import datetime
+from dateutil import parser
 import json
+import timedelta
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -26,15 +29,18 @@ class Event(models.Model):
     user = models.ForeignKey(User)
     title = models.CharField(max_length=255)
     desc = models.CharField(max_length=255, blank=True, null=True)
+    location = models.CharField(max_length=255, blank=True, null=True)
     occurance = models.CharField(max_length=8, choices=OCCURANCE_CHOICES)
     days = models.CommaSeparatedIntegerField(max_length=1000)
-    follow_up_days = models.CommaSeparatedIntegerField(max_length=1000)
     time = models.TimeField()
-    # when to send invite
-    # location
+    send_delta = timedelta.fields.TimedeltaField()
 
     def __unicode__(self):
         return self.title
+
+    ##############
+    # PROPERTIES #
+    ##############
 
     @property
     def invited(self):
@@ -58,6 +64,18 @@ class Event(models.Model):
         return count
 
     @property
+    def send_date(self):
+        return parser.parse(self.send_date)
+
+    @send_date.setter
+    def send_date(self):
+        self._send_date = datetime.strftime('%d %H:%M:%S')
+
+    ########
+    # JSON #
+    ########
+
+    @property
     def days_json(self):
         if not self.days:
             return "false"
@@ -74,6 +92,10 @@ class Event(models.Model):
         if not self.occurance:
             return "false"
         return json.dumps(self.occurance)
+
+    #################
+    # EVENT MEMBERS #
+    #################
 
     def update_members(self, primary_keys):
         """Delete EventMember not in primary_keys.

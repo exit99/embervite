@@ -27,6 +27,7 @@ def login(request):
                              Please contact support.")
     else:
         messages.error(request, "The username and password were incorrect.")
+        return redirect('index')
     return redirect('event-list')
 
 

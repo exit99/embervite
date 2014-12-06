@@ -1,10 +1,7 @@
-"""
-Be sure to replace YOURSITEHERE with the name of your site.
-"""
-
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 DEBUG = False
 
@@ -33,6 +30,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'embervite.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'embervite.urls'

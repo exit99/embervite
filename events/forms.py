@@ -43,7 +43,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        exclude = ['user', 'days', 'follow_up_days', 'time']
+        exclude = ['user', 'days', 'time', 'send_delta']
 
 
 class MemberForm(forms.ModelForm):

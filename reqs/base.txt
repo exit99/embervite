@@ -5,3 +5,5 @@ django-pipeline==1.3.25
 futures==2.2.0
 jsmin==2.0.11
 cssmin==0.2.0
+python-dateutil==2.3
+django-timedeltafield==0.7.3
