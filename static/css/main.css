@@ -21,6 +21,14 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
+.upper-left-button {
+    float: left;
+}
+
+.upper-right-button {
+    float: right;
+}
+
 
 
 

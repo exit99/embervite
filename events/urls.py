@@ -7,4 +7,5 @@ urlpatterns = patterns('events.views',
 
     url(r'^member/list/$', 'member_list', name='member-list'),
     url(r'^member/edit/(\d{1,6})/$', 'member_edit', name='member-edit'),
+    url(r'^member/download-backup$', 'download_backup', name='download-backup'),
 )

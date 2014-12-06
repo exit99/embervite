@@ -30,6 +30,8 @@ class Event(models.Model):
     days = models.CommaSeparatedIntegerField(max_length=1000)
     follow_up_days = models.CommaSeparatedIntegerField(max_length=1000)
     time = models.TimeField()
+    # when to send invite
+    # location
 
     def __unicode__(self):
         return self.title

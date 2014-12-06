@@ -9,7 +9,14 @@
       <div class="row">
         <div class="col-md-12">
           <h2>Members</h2>
-            <p><a href="{% url 'member-edit' 0 %}"><button class="btn btn-success">Create New Member</button></a></p>
+            <p><a class="upper-left-button" href="{% url 'member-edit' 0 %}">
+                <button class="btn btn-success">Create New Member</button>
+            </a></p>
+            {% if members %}
+            <p><a class="upper-right-button" href="{% url 'download-backup' %}">
+                <button class="btn btn-primary">Download Backup</button>
+            </a></p>
+            {% endif %}
         </div>
       </div>
     </div>

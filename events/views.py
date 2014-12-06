@@ -1,8 +1,10 @@
+import csv
 import json
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.core import serializers
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 
 from events.forms import EventForm, MemberForm
@@ -107,3 +109,20 @@ def member_edit(request, pk):
         'pk': pk,
     }
     return render(request, 'events/member_edit.html', context)
+
+
+@login_required
+def download_backup(request):
+    members = Member.objects.filter(user=request.user)
+    if not members:
+        return HttpResponse(200)
+    json_members = serializers.serialize('json', members)
+
+    response = HttpResponse(content_type='text/json')
+    content = 'attachment; filename="embervite-backups-{}.json"'.format(
+        request.user.username
+    )
+    response['Content-Disposition'] = content
+    response.write(json_members)
+
+    return response
