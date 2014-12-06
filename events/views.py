@@ -21,7 +21,7 @@ def event_list(request):
 @login_required
 def event_edit(request, pk):
     event = Event.objects.filter(pk=pk, user=request.user).first()
-    if not event:
+    if not event and pk != '0':
         raise Http404
 
     if request.POST:
@@ -30,7 +30,7 @@ def event_edit(request, pk):
         form = EventForm(request.POST, instance=event, days=days, time=time,
                          user=request.user)
     else:
-        form = EventForm(instance=event, time=event.time)
+        form = EventForm(instance=event)
     if form.is_valid():
         # TODO form can be submitted without a proper day
         if not event:
@@ -55,7 +55,7 @@ def event_edit(request, pk):
 @login_required
 def event_add(request, pk):
     event = Event.objects.filter(pk=pk, user=request.user).first()
-    if not event:
+    if not event and pk != '0':
         raise Http404
     members = Member.objects.filter(user=request.user)
     context = {
@@ -78,7 +78,7 @@ def member_list(request):
 @login_required
 def member_edit(request, pk):
     member = Member.objects.filter(pk=pk, user=request.user).first()
-    if not member:
+    if not member and pk != '0':
         raise Http404
 
     form = MemberForm(request.POST or None, instance=member, user=request.user)
