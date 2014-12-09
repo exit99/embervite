@@ -41,7 +41,18 @@
                             <td>{{ member.email }}</td>
                             <td>{{ member.phone }}</td>
                             <td>{{ member.preference }}</td>
-                            <td><a href="{% url 'member-edit' member.pk %}"><button class="btn btn-primary">Edit</button></a></td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary edit-event" onclick="goTo('{% url 'member-edit' member.pk %}')" >Edit</button>
+                                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                  </button>
+                                  <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{% url 'member-delete' member.pk %}">Delete</a></li>
+                                  </ul>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

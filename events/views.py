@@ -48,8 +48,9 @@ def event_disable(request, pk):
 @login_required
 def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk, user=request.user)
+    title = event.title
     event.delete()
-    messages.success(request, "Event Deleted.")
+    messages.success(request, "{} Deleted.".format(title))
     return redirect('event-list')
 
 
@@ -145,6 +146,15 @@ def member_edit(request, pk):
         'pk': pk,
     }
     return render(request, 'events/member_edit.html', context)
+
+
+@login_required
+def member_delete(request, pk):
+    member = get_object_or_404(Member, pk=pk, user=request.user)
+    name = member.full_name
+    member.delete()
+    messages.success(request, "{} Deleted.".format(name))
+    return redirect('member-list')
 
 
 @login_required
