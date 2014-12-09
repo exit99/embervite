@@ -7,4 +7,6 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'embervite.views.logout', name='logout'),
     url(r'^ev/', include('events.urls')),
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^debug/$', 'embervite.views.debug_view', name='debug'),
 )

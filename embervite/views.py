@@ -1,11 +1,13 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import (
     authenticate,
     login as login_user,
     logout as logout_user,
 )
-from django.views.decorators.http import require_POST
+from django.http import Http404
 from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
 
 
 def index(request):
@@ -35,3 +37,10 @@ def login(request):
 def logout(request):
     logout_user(request)
     return redirect('index')
+
+
+def debug_view(request):
+    from events.utils import check_for_replies
+    if not settings.DEBUG:
+        raise Http404
+    check_for_replies()

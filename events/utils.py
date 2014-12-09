@@ -1,32 +1,64 @@
-import datetime
+import re
+
+from emails import GmailHelper
+from embervite.models import UserProfile
+from events.models import Event, Member, EventMember
 
 
-class EventDateHelper(object):
-    """Helps convert Event fields to human readable, and usable datetimes."""
-    def __init__(self, *args, **kwargs):
-        self.model = kwargs.pop('model')
-        super(EventDateHelper, self).__init__(*args, **kwargs)
-        self.now = datetime.datetime.now()
+def check_for_replies():
+    gmail_inbox = GmailHelper()
+    for email in gmail_inbox.unread_emails:
+        if email.get('type') == 'SMS':
+            yes, no = has_yes_or_no(email.get('text'))
+            if yes and not no:
+                update_event_member_from_email(email, True)
+            elif not yes and no:
+                update_event_member_from_email(email, False)
+            else:
+                # gmail_inbox.move_to_folder(email.get('id'), 'Error')
+                pass
 
-    def calc_invite_date(self):
-        return self.calc_date(int(self.model.invite_day),
-                              self.model.invite_time)
 
-    def calc_event_date(self):
-        return self.calc_date(int(self.model.days), self.model.time)
+def has_yes_or_no(text):
+    yes = re.findall('yes', text, re.IGNORECASE)
+    no = re.findall('no', text, re.IGNORECASE)
+    return yes, no
 
-    def calc_date(self, day, time):
-        return self.update_time(self.calc_day(day), time)
 
-    def calc_day(self, day):
-        """We save with 1-7 not 0-6 like datetime.weekday()."""
-        weekday = self.now.weekday() + 1
-        if weekday > day:
-            days = 6 - weekday + day
-        else:
-            days = day - weekday
-        return self.now + datetime.timedelta(days=days)
+def update_event_member_from_email(email, attending):
+    event, user = get_info_from_subject(email.get('subject'))
+    if not event or not user:
+        # TODO probably want to log here as well
+        return
+    phone = email.get('from', ' @ ').split('@')[0]
+    while len(phone) > 10:
+        phone = phone[1:]
+    members = Member.objects.filter(user=user, phone=phone)
 
-    def update_time(self, date, time):
-        return datetime.datetime(date.year, date.month, date.day, time.hour,
-                                 time.minute)
+    try:
+        event_member = EventMember.objects.get(member=members.first(),
+                                               event=event)
+    except EventMember.DoesNotExist:
+        # TODO probably want to log here as well
+        pass
+    else:
+        event_member.attending = attending
+        event_member.save()
+
+
+def get_info_from_subject(subject):
+    if subject.startswith('RE:'):
+        subject = subject[3:]
+    data = subject.split('ID:')
+    title = data[0].strip(' \r\n')
+    unique_hash = data[1][:11]
+    user = None
+    profile = UserProfile.objects.filter(unique_hash=unique_hash)
+    if profile:
+        user = profile.first().user
+    try:
+        event = Event.objects.get(user=user, title=title)
+    except Event.DoesNotExist:
+        return False, user
+    else:
+        return event, user

@@ -1,6 +1,8 @@
 from django.shortcuts import redirect
 import django.utils.timezone
 
+from embervite.models import UserProfile
+
 from pytz import timezone
 
 
@@ -11,6 +13,8 @@ class LoginRequiredMiddleware:
             accepted = ['/', '/login/']
             if not request.user.is_authenticated() and path not in accepted:
                 return redirect('index')
+            elif path not in accepted:
+                UserProfile.objects.get_or_create(user=request.user)
 
 
 class TimeZoneMiddleware:

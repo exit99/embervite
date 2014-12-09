@@ -18,6 +18,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Project Apps
     'events',
+    'embervite',
     # Third Party Apps
     'pipeline',
 )
