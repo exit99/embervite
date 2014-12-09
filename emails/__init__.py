@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from django.template import Context
 
 
-def send_rsvp_email(event_member):
+def send_invite_email(event_member):
     htmly = get_template('templated_email/event.html')
     plaintext = get_template('templated_email/event.txt')
 
@@ -25,7 +25,9 @@ def send_rsvp_email(event_member):
     html_content = htmly.render(d)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
-    msg.send()
+    if msg.send():
+        event_member.invite_sent = True
+        event_member.save()
 
 
 class GmailHelper(object):

@@ -1,13 +1,32 @@
+from datetime import datetime
 import re
 
-from emails import GmailHelper
+from emails import send_invite_email, GmailHelper
+from sms import send_text
 from embervite.models import UserProfile
 from events.models import Event, Member, EventMember
 
 
 def send_invites():
-    for event in Event.objects.all()
-        EventM
+    for event in Event.objects.all():
+        if datetime.now() > event.invite_date:
+            event_members = event.eventmember_set.all().exclude(
+                invite_sent=True
+            )
+            for event_member in event_members:
+                if event_member.preference in ['phone', 'both']:
+                    send_text(event_member):
+                if event_member.preference in ['email', 'both']:
+                    send_invite_email(event_member)
+            event.needs_reset = True
+            event.save()
+        if datetime.now() > event.event_date and event.needs_reset:
+            event.needs_reset = False
+            for event_member in event.eventmember_set.all():
+                event_member.attending = None
+                event_member.invite_sent = None
+                event_member.follow_up_sent = None
+                event_membet.save()
 
 
 def check_for_replies():

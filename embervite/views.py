@@ -40,7 +40,8 @@ def logout(request):
 
 
 def debug_view(request):
-    from events.utils import check_for_replies
+    from events.utils import check_for_replies, send_invites
     if not settings.DEBUG:
         raise Http404
+    send_invites()
     check_for_replies()

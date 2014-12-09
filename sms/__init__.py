@@ -15,4 +15,7 @@ def send_text(event_member):
         event.location,
         event.event_date,
     )
-    send_mail(subject, msg, settings.EMAIL_HOST_USER, [to], fail_silently=False)
+    if send_mail(subject, msg, settings.EMAIL_HOST_USER, [to],
+                 fail_silently=True):
+        event_member.invite_sent = True
+        event_member.save()

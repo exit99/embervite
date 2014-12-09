@@ -37,6 +37,7 @@ class Event(models.Model):
     invite_day = models.CommaSeparatedIntegerField(max_length=1000)
     invite_time = models.TimeField()
     disabled = models.BooleanField(default=False)
+    needs_reset = models.BooleanField(default=False)
 
     def __init__(self, *args, **kwargs):
         super(Event, self).__init__(*args, **kwargs)
