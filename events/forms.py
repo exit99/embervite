@@ -57,7 +57,8 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        exclude = ['user', 'days', 'time', 'invite_day', 'invite_time']
+        exclude = ['user', 'days', 'time', 'invite_day', 'invite_time',
+                   'disabled']
 
 
 class MemberForm(forms.ModelForm):
@@ -100,7 +101,9 @@ class MemberForm(forms.ModelForm):
 
     def clean_carrier(self):
         carrier = self.cleaned_data.get('carrier')
-        if self.cleaned_data.get('phone') and not carrier:
+        phone = self.cleaned_data.get('phone')
+        pref = self.cleaned_data.get('pref')
+        if (phone or pref == "both") and not carrier:
             raise forms.ValidationError('No carrier selected for phone.')
         return carrier
 

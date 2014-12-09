@@ -6,7 +6,6 @@
 
 {% block body %}
    <div class="container">
-      <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-12">
           <h2>Events</h2>
@@ -24,7 +23,7 @@
                         <th>Title</th>
                         <th>Occurance</th>
                         <th>Event Date</th>
-                        <th>Invite Date</th>
+                        <th>Invite Send Date</th>
                         <th>Invited</th>
                         <th>Attending</th>
                         <th>Not Attending</th>
@@ -34,7 +33,7 @@
                 </thead>
                 <tbody>
                     {% for event in events %}
-                        <tr>
+                    <tr {% if event.disabled %}class="disabled-table-row"{% endif %}>
                             <td>{{ event.title }}</td>
                             <td>{{ event.occurance }}</td>
                             <td>{{ event.event_date }}</td>
@@ -43,7 +42,22 @@
                             <td><center>{{ event.attending }}</center></td>
                             <td><center>{{ event.not_attending }}</center></td>
                             <td><a href="{% url 'event-add' event.pk %}"><button class="btn btn-success">Add Members</button></a></td>
-                            <td><a href="{% url 'event-edit' event.pk %}"><button class="btn btn-primary">Edit</button></a></td>
+                            <td>
+                                
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary edit-event" onclick="goTo('{% url 'event-edit' event.pk %}')" >Edit</button>
+                                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                  </button>
+                                  <ul class="dropdown-menu" role="menu">
+                                      <li><a href="{% url 'event-attendance' event.pk %}">View Attendance</a></li>
+                                      <li><a href="{% url 'event-disable' event.pk %}">{% if event.disabled %}Enable{% else %}Disable{% endif %}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="{% url 'event-delete' event.pk %}">Delete</a></li>
+                                  </ul>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -52,6 +66,11 @@
       </div>
 
       <hr>
+<script>
+function goTo(url) {
+    window.location.href = url
+};
+</script>
 {% endblock %}
 
 {% block footer %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load event_tags %}
+
+{% block head %}
+{% endblock  %}
+
+{% block body %}
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><h2>Invited</h2></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event_member in invited %}
+                        <tr>
+                            <td>{{ event_member.member.full_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><h2>Attending</h2></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event_member in attending %}
+                        <tr>
+                            <td>{{ event_member.member.full_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><h2>Not Attending</h2></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event_member in not_attending %}
+                        <tr>
+                            <td>{{ event_member.member.full_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+  </div>
+
+  <hr>
+{% endblock %}
+
+{% block footer %}
+        <p>&copy; Company 2014</p>
+{% endblock %}

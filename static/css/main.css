@@ -21,6 +21,10 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
+button a {
+    color: white;
+}
+
 .upper-left-button {
     float: left;
 }
@@ -33,6 +37,14 @@ input[type=checkbox] {
     font-weight: bold;
 }
 
+.disabled-table-row {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  filter: alpha(opacity=30);
+  -moz-opacity: 0.3;
+  -khtml-opacity: 0.3;
+  opacity: 0.3;
+}
+}
 
 
 

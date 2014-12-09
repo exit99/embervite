@@ -21,6 +21,39 @@ def event_list(request):
 
 
 @login_required
+def event_attendance(request, pk):
+    event = get_object_or_404(Event, pk=pk, user=request.user)
+    attending = EventMember.objects.filter(event=event, attending=True)
+    not_attending = EventMember.objects.filter(event=event, attending=False)
+    invited = EventMember.objects.filter(event=event, attending=None)
+    context = {
+        'invited': invited,
+        'attending': attending,
+        'not_attending': not_attending,
+    }
+    return render(request, 'events/event_attendance.html', context)
+
+
+@login_required
+def event_disable(request, pk):
+    event = get_object_or_404(Event, pk=pk, user=request.user)
+    event.disabled = not event.disabled
+    event.save()
+    msg = {True: 'disabled', False: 'enabled'}
+    messages.success(request, "{} is {}.".format(event.title,
+                                                msg[event.disabled]))
+    return redirect('event-list')
+
+
+@login_required
+def event_delete(request, pk):
+    event = get_object_or_404(Event, pk=pk, user=request.user)
+    event.delete()
+    messages.success(request, "Event Deleted.")
+    return redirect('event-list')
+
+
+@login_required
 def event_edit(request, pk):
     event = Event.objects.filter(pk=pk, user=request.user).first()
     if not event and pk != '0':
@@ -66,7 +99,7 @@ def event_add(request, pk):
         primary_keys = [v for k, v in request.POST.iteritems()
                         if k != "csrfmiddlewaretoken" ]
         invited = event.update_members(primary_keys)
-        msg = "{} Members are now invited to {}".format(invited, event.title)
+        msg = "{} Members are now invited to {}.".format(invited, event.title)
         messages.success(request, msg)
         return redirect('event-list')
 

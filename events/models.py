@@ -36,6 +36,7 @@ class Event(models.Model):
     time = models.TimeField()
     invite_day = models.CommaSeparatedIntegerField(max_length=1000)
     invite_time = models.TimeField()
+    disabled = models.BooleanField(default=False)
 
     def __init__(self, *args, **kwargs):
         super(Event, self).__init__(*args, **kwargs)
@@ -187,8 +188,11 @@ class EventDateHelper(object):
         self.now = datetime.datetime.now()
 
     def calc_invite_date(self):
-        return self.calc_date(int(self.model.invite_day),
-                              self.model.invite_time)
+        event_date = self.calc_event_date()
+        invite_date = event_date - datetime.timedelta(days=int(
+            self.model.invite_day)
+        )
+        return self.update_time(invite_date, self.model.invite_time)
 
     def calc_event_date(self):
         return self.calc_date(int(self.model.days), self.model.time)

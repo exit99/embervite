@@ -5,6 +5,11 @@ from embervite.models import UserProfile
 from events.models import Event, Member, EventMember
 
 
+def send_invites():
+    for event in Event.objects.all()
+        EventM
+
+
 def check_for_replies():
     gmail_inbox = GmailHelper()
     for email in gmail_inbox.unread_emails:
