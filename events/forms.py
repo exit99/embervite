@@ -49,6 +49,7 @@ class EventForm(forms.ModelForm):
             data['user'] = self.user
             data['invite_day'] = self.invite_day
             data['invite_time'] = self._convert_time(self.invite_time)
+            data['last_event_date'] = None
             return data
 
     def _convert_time(self, time):
@@ -58,12 +59,13 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         exclude = ['user', 'days', 'time', 'invite_day', 'invite_time',
-                   'disabled']
+                   'disabled', 'needs_reset', 'last_event_date']
 
 
 class MemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user, kwargs = pop_form_kwarg('user', kwargs)
+        self.pk, kwargs = pop_form_kwarg('pk', kwargs)
         self.event = forms.ChoiceField(choices=Event.objects.filter(
             user=self.user),
             required=False
@@ -75,7 +77,8 @@ class MemberForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if Member.objects.filter(user=self.user, email=email).exists():
+        members = Member.objects.filter(user=self.user, email=email)
+        if members.exists() and self.pk not in [member.pk for member in members]:
             raise forms.ValidationError('One of your members has this \
                                         email already.')
         return email
@@ -94,7 +97,8 @@ class MemberForm(forms.ModelForm):
         phone = re.sub('[()-]', '', phone)
         if len(phone) not in [10, 0]:
             raise forms.ValidationError('Invalid phone number length.')
-        if Member.objects.filter(user=self.user, phone=phone).exists():
+        members = Member.objects.filter(user=self.user, phone=phone)
+        if members.exists() and self.pk not in [member.pk for member in members]:
             raise forms.ValidationError('One of your members has this \
                                         number already.')
         return phone

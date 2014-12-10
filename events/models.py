@@ -10,6 +10,8 @@ from embervite.constants import STATES
 from embervite.carriers import CARRIER_CHOICES
 
 
+
+
 OCCURANCE_CHOICES = (
     # ('once', 'Once'),
     ('weekly', 'Weekly'),
@@ -38,10 +40,18 @@ class Event(models.Model):
     invite_time = models.TimeField()
     disabled = models.BooleanField(default=False)
     needs_reset = models.BooleanField(default=False)
+    last_event_date = models.DateTimeField(blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
         super(Event, self).__init__(*args, **kwargs)
         self.helper = EventDateHelper(model=self)
+
+    def save(self, *args, **kwargs):
+        """Defualt to first event date if not active.  (Avoids breaking
+        send_invites.)"""
+        if not self.last_event_date:
+            self.last_event_date = self.event_date
+        super(Event, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.title
@@ -52,7 +62,7 @@ class Event(models.Model):
 
     @property
     def invited(self):
-        count = EventMember.objects.filter(event=self).count()
+        count = EventMember.objects.filter(event=self, invite_sent=True).count()
         if not count:
             return 0
         return count
@@ -86,6 +96,15 @@ class Event(models.Model):
     @property
     def invite_date(self):
         return self.helper.calc_invite_date()
+
+    @property
+    def time_to_reset(self):
+        last = self.last_event_date
+        date = datetime.datetime(last.year, last.month, last.day,
+                                 last.hour, last.minute)
+        return datetime.datetime.now() > date and self.needs_reset
+
+
 
     ########
     # JSON #

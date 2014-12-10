@@ -14,19 +14,21 @@ def send_invites():
                 invite_sent=True
             )
             for event_member in event_members:
-                if event_member.preference in ['phone', 'both']:
-                    send_text(event_member):
-                if event_member.preference in ['email', 'both']:
+                if event_member.member.preference in ['phone', 'both']:
+                    send_text(event_member)
+                if event_member.member.preference in ['email', 'both']:
                     send_invite_email(event_member)
             event.needs_reset = True
             event.save()
-        if datetime.now() > event.event_date and event.needs_reset:
+        if event.time_to_reset:
             event.needs_reset = False
+            event.last_event_date = event.event_date
+            event.save()
             for event_member in event.eventmember_set.all():
                 event_member.attending = None
-                event_member.invite_sent = None
-                event_member.follow_up_sent = None
-                event_membet.save()
+                event_member.invite_sent = False
+                event_member.follow_up_sent = False
+                event_member.save()
 
 
 def check_for_replies():

@@ -128,8 +128,11 @@ def member_edit(request, pk):
     member = Member.objects.filter(pk=pk, user=request.user).first()
     if not member and pk != '0':
         raise Http404
+    data = {'instance': member, 'user': request.user}
+    if member:
+        data['pk'] = member.pk
+    form = MemberForm(request.POST or None, **data)
 
-    form = MemberForm(request.POST or None, instance=member, user=request.user)
     if form.is_valid():
         if not member:
             Member.objects.create(**form.cleaned_data)
