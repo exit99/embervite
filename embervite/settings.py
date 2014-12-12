@@ -108,7 +108,7 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-PIPELINE_ENABLED = True
+PIPELINE_ENABLED = False
 PIPELINE_DISABLE_WRAPPER = False
 
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
@@ -176,4 +176,7 @@ try:
 except ImportError:
     pass
 else:
-    INSTALLED_APPS += DEBUG_APPS
+    try:
+        INSTALLED_APPS += DEBUG_APPS
+    except:
+        pass
