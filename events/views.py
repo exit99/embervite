@@ -100,7 +100,7 @@ def event_add(request, pk):
         primary_keys = [v for k, v in request.POST.iteritems()
                         if k != "csrfmiddlewaretoken" ]
         invited = event.update_members(primary_keys)
-        msg = "{} Members are now invited to {}.".format(invited, event.title)
+        msg = "Members Added to {}".format(event.title)
         messages.success(request, msg)
         return redirect('event-list')
 
