@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^debug/$', 'embervite.views.debug_view', name='debug'),
-)
+) 
+
+

@@ -1,4 +1,5 @@
 {% load static %}
+{% load staticfiles %}
 {% load compressed %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -15,6 +16,10 @@
         {# load compressed css #}
         {% compressed_css 'site' %}
 
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+
         <style>
             body {
                 padding-top: 50px;
@@ -24,6 +29,13 @@
 
         {# load compressed js #}
         {% compressed_js 'top-js' %}
+
+           <script type="application/javascript" src="/static/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+           <script type="application/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+           <script type="application/javascript" src="/static/js/angular.min.js"></script>
+           <script type="application/javascript" src="/static/js/events/app.js"></script>
+           <script type="application/javascript" src="/static/js/events/controller.js"></script>
+           <script type="application/javascript" src="/static/js/events/directive.js"></script>
 
         {% block head %}
         {% endblock %}
@@ -93,6 +105,9 @@
 
         {# load compressed js #}
         {% compressed_js 'bottom-js' %}
+
+	<script type="application/javascript" src="/static/js/vendor/bootstrap.min.js"></script>
+        <script type="application/javascript" src="/static/js/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
