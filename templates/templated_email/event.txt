@@ -5,8 +5,7 @@ You have been invited to {{ event_member.event.title }}
 Are you coming?
 Visit this link to confirm: 
 
-{% url 'email-yes' event_member.unique_hash %}
+http://68.233.232.239:9000{% url 'email-yes' event_member.unique_hash %}
 
 Looking forward to seeing you!.
 
-EmberVite Application by Zach Kazanski
