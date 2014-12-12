@@ -37,7 +37,7 @@
                             <td>{{ event.title }}</td>
                             <td>{{ event.occurance }}</td>
                             <td>{{ event.event_date }}</td>
-                            <td>{{ event.invite_date }}</td>
+                            <td>{% if not event.invited %}{{ event.invite_date }}{% else %}Invites Sent!{% endif %}</td>
                             <td><center>{{ event.invited }}</center></td>
                             <td><center>{{ event.attending }}</center></td>
                             <td><center>{{ event.not_attending }}</center></td>
