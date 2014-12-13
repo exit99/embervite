@@ -37,14 +37,14 @@
                             <td>{{ event.title }}</td>
                             <td>{{ event.occurance }}</td>
                             <td>{{ event.event_date }}</td>
-                            <td>{% if not event.invited %}{{ event.invite_date }}{% else %}Invites Sent!{% endif %}</td>
+                            <td>{% if not event.invited %}{{ event.invite_date }}{% else %}Invites Sent{% endif %}</td>
                             <td><center>{{ event.invited }}</center></td>
                             <td><center>{{ event.attending }}</center></td>
                             <td><center>{{ event.not_attending }}</center></td>
                             <td><a href="{% url 'event-add' event.pk %}"><button class="btn btn-success">Add Members</button></a></td>
                             <td>
                                 
-                                <div class="btn-group">
+                                <div class="btn-group edit-btn-group">
                                     <button type="button" class="btn btn-primary edit-event" onclick="goTo('{% url 'event-edit' event.pk %}')" >Edit</button>
                                   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <span class="caret"></span>
@@ -53,6 +53,7 @@
                                   <ul class="dropdown-menu" role="menu">
                                       <li><a href="{% url 'event-attendance' event.pk %}">View Attendance</a></li>
                                       <li><a href="{% url 'event-disable' event.pk %}">{% if event.disabled %}Enable{% else %}Disable{% endif %}</a></li>
+                                      <li><a href="{% url 'event-send-invites' event.pk %}">Manually send invites</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{% url 'event-delete' event.pk %}">Delete</a></li>
                                   </ul>

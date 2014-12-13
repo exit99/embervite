@@ -37,25 +37,10 @@ button a {
     font-weight: bold;
 }
 
-.disabled-table-row {
+.disabled-table-row td:not(:last-child) {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
   filter: alpha(opacity=30);
   -moz-opacity: 0.3;
   -khtml-opacity: 0.3;
   opacity: 0.3;
 }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-

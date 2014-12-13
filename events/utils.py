@@ -8,27 +8,35 @@ from events.models import Event, Member, EventMember
 
 
 def send_invites():
-    for event in Event.objects.all():
+    for event in Event.objects.filter(disabled=False):
         if datetime.now() > event.invite_date:
-            event_members = event.eventmember_set.all().exclude(
-                invite_sent=True
-            )
-            for event_member in event_members:
-                if event_member.member.preference in ['phone', 'both']:
-                    send_text(event_member)
-                if event_member.member.preference in ['email', 'both']:
-                    send_invite_email(event_member)
-            event.needs_reset = True
-            event.save()
+            send_event_invites(event)
         if event.time_to_reset:
-            event.needs_reset = False
-            event.last_event_date = event.event_date
-            event.save()
-            for event_member in event.eventmember_set.all():
-                event_member.attending = None
-                event_member.invite_sent = False
-                event_member.follow_up_sent = False
-                event_member.save()
+            reset_event(event)
+
+
+def send_event_invites(event, needs_reset=True):
+    event_members = event.eventmember_set.all().exclude(
+        invite_sent=True
+    )
+    for event_member in event_members:
+        if event_member.member.preference in ['phone', 'both']:
+            send_text(event_member)
+        if event_member.member.preference in ['email', 'both']:
+            send_invite_email(event_member)
+    event.needs_reset = needs_reset
+    event.save()
+
+
+def reset_event(event):
+    event.needs_reset = False
+    event.last_event_date = event.event_date
+    event.save()
+    for event_member in event.eventmember_set.all():
+        event_member.attending = None
+        event_member.invite_sent = False
+        event_member.follow_up_sent = False
+        event_member.save()
 
 
 def check_for_replies():

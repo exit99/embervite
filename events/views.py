@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from events.forms import EventForm, MemberForm
 from events.models import Event, Member, EventMember
+from events.utils import send_event_invites
 
 
 @login_required
@@ -35,13 +36,23 @@ def event_attendance(request, pk):
 
 
 @login_required
+def event_send_invites(request, pk):
+    event = get_object_or_404(Event, pk=pk, user=request.user)
+    event.disabled = False
+    event.save()
+    send_event_invites(event, needs_reset=False)
+    messages.success(request, "Invites Sent")
+    return redirect('event-list')
+
+
+@login_required
 def event_disable(request, pk):
     event = get_object_or_404(Event, pk=pk, user=request.user)
     event.disabled = not event.disabled
     event.save()
     msg = {True: 'disabled', False: 'enabled'}
     messages.success(request, "{} is {}.".format(event.title,
-                                                msg[event.disabled]))
+                                                 msg[event.disabled]))
     return redirect('event-list')
 
 
@@ -71,12 +82,17 @@ def event_edit(request, pk):
     else:
         form = EventForm(instance=event)
     if form.is_valid():
+        data = form.cleaned_data
+        if int(pk) == 0:
+            data['disabled'] = True
+
         # TODO form can be submitted without a proper day
         if not event:
-            Event.objects.create(**form.cleaned_data)
-            messages.success(request, "New Event Created!")
+            Event.objects.create(**data)
+            messages.success(request, "New Event Created!  You must enable it \
+                             before invites can be sent.")
         else:
-            for attr, value in form.cleaned_data.iteritems():
+            for attr, value in data.iteritems():
                 setattr(event, attr, value)
             event.save()
             messages.success(request, "Event Information Updated!")
