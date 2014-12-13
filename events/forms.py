@@ -78,7 +78,7 @@ class MemberForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         members = Member.objects.filter(user=self.user, email=email)
-        if members.exists() and self.pk not in [member.pk for member in members]:
+        if members.exists() and self.pk not in [member.pk for member in members] and email != '':
             raise forms.ValidationError('One of your members has this \
                                         email already.')
         return email
