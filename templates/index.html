@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block head %}
 {% endblock  %}
 
 {% block body %}
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
+    <div class="jumbotron" style="background: url({% static 'images/table.jpeg'%}); height:100vh; background-size: cover;">
+      <div class="container" style="color:white;">
         <h1>EmberVite</h1>
         <p>Keep track of people attending your events</p>
         {# <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p> #}
