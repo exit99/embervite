@@ -16,9 +16,8 @@ def send_invites():
 
 
 def send_event_invites(event, needs_reset=True):
-    event_members = event.eventmember_set.all().exclude(
-        invite_sent=True
-    )
+    event_members = event.eventmember_set.filter(invite_sent=False,
+                                                 disabled=False)
     for event_member in event_members:
         if event_member.member.preference in ['phone', 'both']:
             send_text(event_member)

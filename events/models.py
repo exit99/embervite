@@ -133,16 +133,20 @@ class Event(models.Model):
     #################
 
     def update_members(self, primary_keys):
-        """Delete EventMember not in primary_keys.
+        """Disable EventMember not in primary_keys.
         Add EventMember in primary_keys. Return new count of Event Members"""
         for event_member in EventMember.objects.filter(event=self):
             if event_member.pk not in primary_keys:
-                event_member.delete()
+                event_member.disabled = True
+                event_member.save()
             else:
                 primary_keys.pop(event_member.pk)
         for pk in primary_keys:
             member = Member.objects.get(pk=pk)
-            EventMember.objects.create(member=member, event=self)
+            em, created = EventMember.objects.get_or_create(member=member,
+                                                            event=self)
+            em.disabled = False
+            em.save()
         return self.invited
 
     def event_members(self, pks=False):
@@ -183,6 +187,7 @@ class EventMember(models.Model):
     follow_up_sent = models.BooleanField(default=False)
     attending = models.NullBooleanField(blank=True, null=True)
     unique_hash = models.TextField(blank=True, null=True)
+    disabled = models.BooleanField(default=False)
 
     def __unicode__(self):
         return "{} at {}".format(self.member, self.event)
@@ -195,7 +200,7 @@ class EventMember(models.Model):
     def _create_hash(self):
         new_hash = os.urandom(100).encode('hex')
         if EventMember.objects.filter(unique_hash=new_hash):
-            return _create_hash()
+            return self._create_hash()
         else:
             return new_hash
 
