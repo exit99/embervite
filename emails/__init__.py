@@ -25,9 +25,9 @@ def send_invite_email(event_member):
     html_content = htmly.render(d)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
-    if msg.send():
-        event_member.invite_sent = True
-        event_member.save()
+    msg.send()
+    event_member.invite_sent = True
+    event_member.save()
 
 
 class GmailHelper(object):
