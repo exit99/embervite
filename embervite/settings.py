@@ -176,7 +176,8 @@ try:
     from embervite.local_settings import *
 except ImportError:
     pass
-else:
+
+if DEBUG:
     try:
         INSTALLED_APPS += DEBUG_APPS
     except:
