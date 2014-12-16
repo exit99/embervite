@@ -220,7 +220,7 @@ class EventDateHelper(object):
         return self.update_time(invite_date, self.model.invite_time)
 
     def calc_event_date(self):
-        return self.calc_date(int(self.model.days), self.model.time)
+        return self.calc_date(int(self.model.days)-1, self.model.time)
 
     def calc_date(self, day, time):
         return self.update_time(self.calc_day(day), time)
