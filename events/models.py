@@ -198,7 +198,7 @@ class EventMember(models.Model):
         super(EventMember, self).save(*args, **kwargs)
 
     def _create_hash(self):
-        new_hash = os.urandom(100).encode('hex')
+        new_hash = os.urandom(8).encode('hex')
         if EventMember.objects.filter(unique_hash=new_hash):
             return self._create_hash()
         else:
