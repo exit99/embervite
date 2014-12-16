@@ -10,8 +10,6 @@ from embervite.constants import STATES
 from embervite.carriers import CARRIER_CHOICES
 
 
-
-
 OCCURANCE_CHOICES = (
     # ('once', 'Once'),
     ('weekly', 'Weekly'),
@@ -229,7 +227,7 @@ class EventDateHelper(object):
         """We save with 1-7 not 0-6 like datetime.weekday()."""
         weekday = self.now.weekday() + 1
         if weekday > day:
-            days = 6 - weekday + day
+            days = (7 - weekday) + day
         else:
             days = day - weekday
         return self.now + datetime.timedelta(days=days)
