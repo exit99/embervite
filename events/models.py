@@ -100,7 +100,7 @@ class Event(models.Model):
         last = self.last_event_date
         date = datetime.datetime(last.year, last.month, last.day,
                                  last.hour, last.minute)
-        return datetime.datetime.now - datetime.timedelta(days=1) > date and self.needs_reset
+        return datetime.datetime.now() > date and self.needs_reset
 
     ########
     # JSON #
@@ -224,7 +224,7 @@ class EventDateHelper(object):
     def calc_day(self, day):
         """We save with 1-7 not 0-6 like datetime.weekday()."""
         weekday = self.now.weekday() + 1
-        if weekday > day:
+        if weekday >= day:
             days = (7 - weekday) + day
         else:
             days = day - weekday
