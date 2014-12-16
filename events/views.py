@@ -38,10 +38,11 @@ def event_attendance(request, pk):
 @login_required
 def event_send_invites(request, pk):
     event = get_object_or_404(Event, pk=pk, user=request.user)
-    event.disabled = False
-    event.save()
-    send_event_invites(event, needs_reset=False)
-    messages.success(request, "Invites Sent")
+    if event.disabled:
+        messages.error(request, "Cannot send invites for a disabled event.")
+    else:
+        send_event_invites(event, needs_reset=False)
+        messages.success(request, "Invites Sent")
     return redirect('event-list')
 
 

@@ -150,7 +150,7 @@ class Event(models.Model):
         return self.invited
 
     def event_members(self, pks=False):
-        event_members = EventMember.objects.filter(event=self)
+        event_members = EventMember.objects.filter(event=self, disabled=False)
         if not pks:
             return event_members
         return [event_member.member.pk for event_member in event_members]
@@ -198,7 +198,7 @@ class EventMember(models.Model):
         super(EventMember, self).save(*args, **kwargs)
 
     def _create_hash(self):
-        new_hash = os.urandom(8).encode('hex')
+        new_hash = os.urandom(4).encode('hex')
         if EventMember.objects.filter(unique_hash=new_hash):
             return self._create_hash()
         else:
