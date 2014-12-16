@@ -100,9 +100,7 @@ class Event(models.Model):
         last = self.last_event_date
         date = datetime.datetime(last.year, last.month, last.day,
                                  last.hour, last.minute)
-        return datetime.datetime.now() > date and self.needs_reset
-
-
+        return datetime.datetime.now - datetime.timedelta(days=1) > date and self.needs_reset
 
     ########
     # JSON #

@@ -11,7 +11,7 @@ def send_invites():
     for event in Event.objects.filter(disabled=False):
         if datetime.now() > event.invite_date and not event.time_to_reset:
             send_event_invites(event)
-        if event.time_to_reset:
+        elif event.time_to_reset:
             reset_event(event)
 
 
