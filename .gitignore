@@ -57,3 +57,5 @@ target/
 
 db.sqlite3
 public/
+
+.coverage_html/

@@ -33,11 +33,9 @@ class TestSendInvites:
         assert Event.objects.filter(needs_reset=False).count() == 1
 
     def test_it_sends_invites(self, admin_user, event_factory, member_factory):
-        days = str(int(datetime.datetime.now().weekday()) + 1)
-        invite_day = str(int(days)-1)
-        event = event_factory.create(user=admin_user, days=days,
-                                     invite_day=invite_day)
-        event.time.hour
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
+        event = event_factory.create(user=admin_user, days=days,invite_day=invite_day)
         member = member_factory.create(user=admin_user)
         em = EventMember.objects.create(event=event, member=member)
         assert not em.invite_sent
@@ -47,21 +45,21 @@ class TestSendInvites:
 
 
     def test_it_resets(self, admin_user, event_factory, member_factory):
-        days = str(int(datetime.datetime.now().weekday()) + 1)
-        invite_day = str(int(days)-1)
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
         last_date = datetime.datetime.now() - datetime.timedelta(days=7)
         event = event_factory.create(user=admin_user, days=days,
                                      invite_day=invite_day, needs_reset=True,
                                      last_event_date=last_date)
-        member = member_factory.create(user=admin_user, invite_sent=True)
-        em = EventMember.objects.create(event=event, member=member)
+        member = member_factory.create(user=admin_user)
+        em = EventMember.objects.create(event=event, member=member,
+                                        invite_sent=True)
         send_invites()
         event = Event.objects.get(pk=event.pk)
         member = Event.objects.get(pk=member.pk)
         em = EventMember.objects.get(pk=em.pk)
         assert not event.needs_reset
-        assert event.last_event_date == event.event_date
+        assert event.last_event_date.date() == event.event_date.date()
         assert em.attending is None
         assert not em.invite_sent
         assert not em.follow_up_sent
-

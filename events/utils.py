@@ -1,8 +1,8 @@
 from datetime import datetime
 import re
 
-from emails import send_invite_email, GmailHelper
-from sms import send_text
+from senders.emails import send_invite_email, GmailHelper
+from senders.sms import send_text
 from embervite.models import UserProfile
 from events.models import Event, Member, EventMember
 
