@@ -4,15 +4,12 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 
-from embervite.models import UserProfile
-
 
 def send_text(event_member):
     member = event_member.member
     event = event_member.event
     to = str(member.phone) + member.carrier
-    user_hash = UserProfile.objects.filter(user=event.user).first().unique_hash
-    subject = event.title + " ID:{}".format(user_hash)
+    subject = event.title + " ID:{}".format(event_member.unique_hash)
     msg = '\n\nWill you be attending {} at {} on {}.\n'.format(
         event.title,
         event.location,

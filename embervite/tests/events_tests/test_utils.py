@@ -32,7 +32,7 @@ class TestSendInvites:
         assert Event.objects.filter(needs_reset=True).count() == 0
         assert Event.objects.filter(needs_reset=False).count() == 1
 
-    def test_it_sends_invites(self, admin_user, event_factory, member_factory):
+    def test_it_emails_invites(self, admin_user, event_factory, member_factory):
         days = datetime.datetime.now().weekday() + 3
         invite_day = days - 2
         event = event_factory.create(user=admin_user, days=days,invite_day=invite_day)
@@ -43,6 +43,16 @@ class TestSendInvites:
         assert EventMember.objects.get(pk=em.pk).invite_sent
         assert Event.objects.get(pk=event.pk).needs_reset
 
+    def test_it_texts_invites(self, admin_user, event_factory, member_factory):
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
+        event = event_factory.create(user=admin_user, days=days,invite_day=invite_day)
+        member = member_factory.create(user=admin_user, preference="phone")
+        em = EventMember.objects.create(event=event, member=member)
+        assert not em.invite_sent
+        send_invites()
+        assert EventMember.objects.get(pk=em.pk).invite_sent
+        assert Event.objects.get(pk=event.pk).needs_reset
 
     def test_it_resets(self, admin_user, event_factory, member_factory):
         days = datetime.datetime.now().weekday() + 3

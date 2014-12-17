@@ -59,39 +59,12 @@ def has_yes_or_no(text):
 
 
 def update_event_member_from_email(email, attending):
-    event, user = get_info_from_subject(email.get('subject'))
-    if not event or not user:
-        # TODO probably want to log here as well
-        return
-    phone = email.get('from', ' @ ').split('@')[0]
-    while len(phone) > 10:
-        phone = phone[1:]
-    members = Member.objects.filter(user=user, phone=phone)
-
-    try:
-        event_member = EventMember.objects.get(member=members.first(),
-                                               event=event)
-    except EventMember.DoesNotExist:
-        # TODO probably want to log here as well
-        pass
-    else:
-        event_member.attending = attending
-        event_member.save()
+    event_member = get_member_from_subject(email.get('subject'))
+    event_member.attending = attending
+    event_member.save()
 
 
-def get_info_from_subject(subject):
-    if subject.startswith('RE:'):
-        subject = subject[3:]
+def get_member_from_subject(subject):
     data = subject.split('ID:')
-    title = data[0].strip(' \r\n')
-    unique_hash = data[1][:11]
-    user = None
-    profile = UserProfile.objects.filter(unique_hash=unique_hash)
-    if profile:
-        user = profile.first().user
-    try:
-        event = Event.objects.get(user=user, title=title)
-    except Event.DoesNotExist:
-        return False, user
-    else:
-        return event, user
+    unique_hash = data[1].strip(' \r\n')
+    return EventMember.objects.get(unique_hash=unique_hash)
