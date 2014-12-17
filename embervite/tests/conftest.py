@@ -17,7 +17,7 @@ class EventFactory(object):
             'time': datetime.time(12, 1),
             'invite_day': '2',
             'days': u'3',
-            'invite_time': u'1:00',
+            'invite_time': datetime.time(1, 0),
         }
         for k, v in kwargs.iteritems():
             arguments[k] = v

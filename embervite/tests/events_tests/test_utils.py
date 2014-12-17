@@ -4,7 +4,9 @@ import datetime
 from events.models import Event, Member, EventMember
 from events.utils import (
     send_invites,
+    check_for_replies,
 )
+from senders.emails import GmailHelper
 
 
 @pytest.mark.django_db
@@ -35,7 +37,8 @@ class TestSendInvites:
     def test_it_emails_invites(self, admin_user, event_factory, member_factory):
         days = datetime.datetime.now().weekday() + 3
         invite_day = days - 2
-        event = event_factory.create(user=admin_user, days=days,invite_day=invite_day)
+        event = event_factory.create(user=admin_user, days=days,
+                                     invite_day=invite_day)
         member = member_factory.create(user=admin_user)
         em = EventMember.objects.create(event=event, member=member)
         assert not em.invite_sent
@@ -46,7 +49,8 @@ class TestSendInvites:
     def test_it_texts_invites(self, admin_user, event_factory, member_factory):
         days = datetime.datetime.now().weekday() + 3
         invite_day = days - 2
-        event = event_factory.create(user=admin_user, days=days,invite_day=invite_day)
+        event = event_factory.create(user=admin_user, days=days,
+                                     invite_day=invite_day)
         member = member_factory.create(user=admin_user, preference="phone")
         em = EventMember.objects.create(event=event, member=member)
         assert not em.invite_sent
@@ -73,3 +77,99 @@ class TestSendInvites:
         assert em.attending is None
         assert not em.invite_sent
         assert not em.follow_up_sent
+
+
+@pytest.mark.django_db
+class TestCheckForReplies:
+    def test_it_does_nothing_with_no_unread_emails(self, event_factory,
+                                                   member_factory,
+                                                   monkeypatch, admin_user):
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
+        event = event_factory.create(user=admin_user, days=days,
+                                     invite_day=invite_day)
+        member = member_factory.create(user=admin_user, preference="phone")
+        em = EventMember.objects.create(event=event, member=member)
+        monkeypatch.setattr(GmailHelper, 'unread_emails', [])
+
+        check_for_replies()
+        assert em.attending is None
+
+    def test_it_does_nothing_with_no_sms_emails(self, event_factory,
+                                                member_factory,
+                                                monkeypatch, admin_user):
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
+        event = event_factory.create(user=admin_user, days=days,
+                                     invite_day=invite_day)
+        member = member_factory.create(user=admin_user, preference="phone")
+        em = EventMember.objects.create(event=event, member=member)
+        unread_email = {'type': 'EMAIL'}
+        monkeypatch.setattr(GmailHelper, 'unread_emails', [unread_email])
+
+        check_for_replies()
+        assert em.attending is None
+
+    def test_it_updates_member_with_yes_reply(self, event_factory,
+                                              member_factory,
+                                              monkeypatch, admin_user):
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
+        event = event_factory.create(user=admin_user, days=days,
+                                     invite_day=invite_day)
+        member = member_factory.create(user=admin_user, preference="phone")
+        em = EventMember.objects.create(event=event, member=member)
+        subject = "Hello ID:{}".format(em.unique_hash)
+        unread_email = {'type': 'SMS', 'text': 'Yes', 'subject': subject}
+        monkeypatch.setattr(GmailHelper, 'unread_emails', [unread_email])
+
+        check_for_replies()
+        assert EventMember.objects.get(unique_hash=em.unique_hash).attending
+
+    def test_it_updates_member_with_no_reply(self, event_factory,
+                                             member_factory,
+                                             monkeypatch, admin_user):
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
+        event = event_factory.create(user=admin_user, days=days,
+                                     invite_day=invite_day)
+        member = member_factory.create(user=admin_user, preference="phone")
+        em = EventMember.objects.create(event=event, member=member)
+        subject = "Hello ID:{}".format(em.unique_hash)
+        unread_email = {'type': 'SMS', 'text': 'Absolutely nO',
+                        'subject': subject}
+        monkeypatch.setattr(GmailHelper, 'unread_emails', [unread_email])
+
+        check_for_replies()
+        assert not EventMember.objects.get(unique_hash=em.unique_hash).attending
+
+    def test_it_does_nothing_with_invalid_reply(self, event_factory,
+                                                member_factory,
+                                                monkeypatch, admin_user):
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
+        event = event_factory.create(user=admin_user, days=days,
+                                     invite_day=invite_day)
+        member = member_factory.create(user=admin_user, preference="phone")
+        em = EventMember.objects.create(event=event, member=member)
+        unread_email = {'type': 'SMS', 'text': 'Absolutely bad'}
+        monkeypatch.setattr(GmailHelper, 'unread_emails', [unread_email])
+
+        check_for_replies()
+        assert EventMember.objects.get(
+            unique_hash=em.unique_hash).attending is None
+
+    def test_it_does_nothing_with_both_yes_no(self, event_factory,
+                                              member_factory,
+                                              monkeypatch, admin_user):
+        days = datetime.datetime.now().weekday() + 3
+        invite_day = days - 2
+        event = event_factory.create(user=admin_user, days=days,
+                                     invite_day=invite_day)
+        member = member_factory.create(user=admin_user, preference="phone")
+        em = EventMember.objects.create(event=event, member=member)
+        unread_email = {'type': 'SMS', 'text': 'yesno'}
+        monkeypatch.setattr(GmailHelper, 'unread_emails', [unread_email])
+
+        check_for_replies()
+        assert em.attending is None

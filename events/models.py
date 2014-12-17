@@ -135,8 +135,6 @@ class Event(models.Model):
             if event_member.pk not in primary_keys:
                 event_member.disabled = True
                 event_member.save()
-            else:
-                primary_keys.pop(event_member.pk)
         for pk in primary_keys:
             member = Member.objects.get(pk=pk)
             em, created = EventMember.objects.get_or_create(member=member,
