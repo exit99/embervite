@@ -17,7 +17,7 @@ def send_invite_email(event_member):
     }
     d = Context(context)
 
-    subject = '{}: Your Invited! RSVP'.format(event_member.event.title)
+    subject = "{}: You're Invited! RSVP".format(event_member.event.title)
     from_email = settings.EMAIL_HOST_USER
     to = event_member.member.email
 
