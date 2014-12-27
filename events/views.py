@@ -217,3 +217,14 @@ def _update_event_member(unique_hash, attending):
     event_member.save()
     return event_member
 
+
+###################
+# EVENT DASHBOARD #
+###################
+
+def event_dashboard(request):
+    events = Event.objects.filter(user=request.user)
+    context = {
+        'events': events,
+    }
+    return render(request, 'events/dashboard.html', context)

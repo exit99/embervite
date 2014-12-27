@@ -44,3 +44,89 @@ button a {
   -khtml-opacity: 0.3;
   opacity: 0.3;
 }
+
+/* ==========================================================================
+   Event Dashboard
+   ========================================================================== */
+
+.dashboard {
+}
+
+.side-panel {
+    height: 650px;
+    background-color: rgb(240, 100, 111);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.main-panel {
+    height: 650px;
+    border: 2px solid rgb(240, 100, 111);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.main-panel .header-box {
+   width: 100%;
+   clear: both;
+}
+
+.main-panel .header-box h3 {
+    display: inline-block;
+} 
+
+.main-panel .header-box h4 {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.main-panel .header-box p {
+    float:right;
+    margin-top: 25px;
+    clear: right;
+}
+
+.large-panel {
+    clear: both;
+    margin-top: 20px;
+}
+
+.large-panel .invited .fa {
+    margin-right: 10px;
+}
+
+.panel-box {
+    border-bottom: 2px solid white;
+    float:left;
+    clear:both;
+    width: 100%;
+}
+
+.panel-box h2 {
+    color: white;
+    float: left;
+}
+
+.panel-box .fa {
+    color: white;
+    margin-top: 25px;
+}
+
+.icon-number-box {
+    margin: 5px 0 0 10px;
+    float: right;
+    display: inline;
+    color: white;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0;
+    color: white;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.bottom .fa {
+    cursor: pointer;
+}

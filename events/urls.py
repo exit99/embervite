@@ -9,6 +9,8 @@ urlpatterns = patterns('events.views',
     url(r'^event/disable/(\d{1,6})/$', 'event_disable', name='event-disable'),
     url(r'^event/delete/(\d{1,6})/$', 'event_delete', name='event-delete'),
 
+    url(r'^dashboard/$', 'event_dashboard', name='event-dashboard'),
+
     url(r'^member/list/$', 'member_list', name='member-list'),
     url(r'^member/edit/(\d{1,6})/$', 'member_edit', name='member-edit'),
     url(r'^member/delete/(\d{1,6})/$', 'member_delete', name='member-delete'),
