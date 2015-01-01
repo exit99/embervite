@@ -5,7 +5,7 @@
    ========================================================================== */
 
 body {
-    background: #eee;
+    background: #f8f8f8;
 }
 
 .django-message {
@@ -47,6 +47,120 @@ button a {
   -moz-opacity: 0.3;
   -khtml-opacity: 0.3;
   opacity: 0.3;
+}
+
+/* ==========================================================================
+   Nav Bar
+   ========================================================================== */
+
+.navbar {
+    background-color: #F5F5F5;
+    background-image: None;
+    border-bottom: 1px solid #fff;
+    -webkit-box-shadow: 0 2px #d7d7d7;
+    -moz-box-shadow: 0 2px #d7d7d7;
+    box-shadow: 0 2px #d7d7d7;
+}
+
+.navbar button {
+    margin: 8px 10px 0 0;
+}
+
+.navbar-brand {
+    margin: 7px 0 7px 5px;
+    padding-left: 20px;
+    font-family: "HelveticaNeue","Helvetica Neue",helvetica,Arial,sans-serif;
+    color: #666 !important;
+    font-size: 1.077em;
+    font-weight: bold;
+    text-shadow: None !important;
+}
+
+.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+    margin-left: 0;
+}
+
+/* ==========================================================================
+   buttons
+   ========================================================================== */
+
+.btn {
+    font-weight: 600;
+}
+
+.btn-secondary {
+    color: #2c2e2f;
+    background: #e1e7eb;
+}
+
+/* ==========================================================================
+   Page Header
+   ========================================================================== */
+
+.page-header {
+    background-color: rgb(0, 180, 147);
+    margin: 0 0 0 0;
+    height: 170px;
+    color: white;
+}
+
+.page-header h1 {
+    margin: 40px 0 15px 15px;
+    font-size: 50px;
+}
+
+.page-header span {
+    font-size: 55px;
+    margin-top: 40px;
+}
+
+.page-header span.badge {
+    margin-top: 0;
+    font-size: 20px;
+    border-radius: 50px;
+    margin-top: 16px;
+    background-color: #FCFCFC;
+    width: 50px;
+    color: #2c2e2f;
+}
+
+.page-header .stats {
+    display: inline-block;
+    margin-left: 30px;
+}
+
+.page-header p {
+   font-size: 22px; 
+   margin-left: 15px;
+   color: #FCFCFC;
+}
+
+
+/* ==========================================================================
+   Main Containers
+   ========================================================================== */
+
+.container.filled .holder {
+    background-color: white;
+    margin-top: 30px;
+}
+
+.container.filled .holder .text-holder {
+    padding: 15px;
+}
+
+.text-holder h5 {
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.text-holder p {
+
+}
+
+.text-holder h6:hover {
+    color: rgb(0, 180, 147)
 }
 
 /* ==========================================================================
