@@ -239,3 +239,13 @@ def event_data(request):
         if event.user == request.user:
             return HttpResponse(event.to_json)
     return HttpResponse(400)
+
+
+def event_member_data(request):
+    if request.method == "POST":
+        event = Event.objects.get(pk=request.POST.get('pk'))
+        if event.user == request.user:
+            ems = EventMember.objects.filter(event=event)
+            data = [{'pk':em.pk, 'attending': em.attending} for em in ems]
+            return HttpResponse(json.dumps(data))
+    return HttpResponse(400)
