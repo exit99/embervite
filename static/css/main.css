@@ -92,6 +92,9 @@ button a {
     color: #2c2e2f;
     background: #e1e7eb;
 }
+.btn-secondary:hover {
+    background: #d0d7db;
+}
 
 /* ==========================================================================
    Page Header
@@ -100,7 +103,7 @@ button a {
 .page-header {
     background-color: rgb(0, 180, 147);
     margin: 0 0 0 0;
-    height: 170px;
+    height: 220px;
     color: white;
 }
 
@@ -214,6 +217,14 @@ button a {
     margin-right: 10px;
 }
 
+.invited .fa {
+    float: right;
+}
+
+.invited tr:hover {
+    cursor:pointer
+}
+
 .panel-box {
     border-bottom: 2px solid white;
     float:left;
@@ -238,14 +249,32 @@ button a {
     color: white;
 }
 
-.bottom {
-    position: absolute;
-    bottom: 0;
-    color: white;
+.bottom span.fa{
+    color: #2c2e2f;
     width: 100%;
     margin-bottom: 15px;
+    font-size: 30px
+}
+
+.bottom span.fa:hover {
+    color: rgb(0, 180, 147);
+    cursor: pointer;
 }
 
 .bottom .fa {
     cursor: pointer;
+}
+
+.guest-list .fa-thumbs-up {
+    color: rgb(0, 180, 147);
+}
+
+.guest-list .fa-thumbs-down {
+    color: rgb(180, 0, 0);
+}
+
+input[name="search"] {
+    float:right;
+    width: 200px;
+    margin-top: -52px;
 }

@@ -5,22 +5,13 @@
 {% endblock  %}
 
 {% block body %}
-<!--
-   <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Events</h2>
-            <p><a href="{% url 'event-edit' 0 %}"><button class="btn btn-success">Create New Event</button></a></p>
-        </div>
-      </div>
-    </div>
--->
 <div class="page-header">
     <div class="container">
       <div class="row">
           <div class="col-md-9">
             <h1>Book Club</h1>
             <p>Wednesday Jan 2, 2015 @ Dale Mabry Library</p>
+            <p>Invites will be sent on Thursday Nov 23, 2015</p>
           </div>
           <div class="col-md-3">
             <div class="stats">
@@ -52,92 +43,83 @@
               <div class="holder">
                 <div class="text-holder">
                   <h5>Events</h5>
-                    <table class="table table-striped invited">
+                    <table class="table table-hover table-striped invited">
                       <tbody>
-                        <tr><td>Book Club</td> </tr>
-                        <tr><td>Wednesday Basketball</td> </tr>
-                        <tr><td>Friend Meetup</td> </tr>
+                      {% for event in events %}
+                      <tr><td>{{ event.title }}<span class="fa fa-arrow-right"></span></tr></td>
+                      {% endfor %}
                       </tbody>
                     </table>
+                </div>
+                <div class="bottom" >
+                  <center>
+                    <span class="fa fa-2x fa-plus-circle"></span>
+                  </center>
                 </div>
               </div>
           </div>
           <div class="col-md-8">
               <div class="holder">
-                <div class="text-holder">
-                  <h4>Book Club</h4>
-                  <h4>Wednesday Baskteball</h4>
+                <div class="text-holder guest-list">
+                  <h5>Guest List</h5>
+                  <input type="text" class="form-control" name="search" value="" placeholder="Search">
+                  <div class="row">
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                              <tr>
+                                  <th>Status</th>
+                                  <th>First Name</th>
+                                  <th>Last Name</th>
+                                  <th>Preference</th>
+                                  <th>Tags</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          <tr>
+                              <td><span class="fa fa-thumbs-up"></td>
+                              <td>Bobby</td>
+                              <td>Taylors</td>
+                              <td><span class="fa fa-envelope"></span></td>
+                              <td>Friends, Family</td>
+                          </tr>
+                          <tr>
+                              <td><span class="fa fa-clock-o"></td>
+                              <td>Bobby</td>
+                              <td>Taylors</td>
+                              <td><span class="fa fa-phone"></span></td>
+                              <td>Friends, Family</td>
+                          </tr>
+                           <tr>
+                              <td><span class="fa fa-thumbs-down"></td>
+                              <td>Bobby</td>
+                              <td>Taylors</td>
+                              <td>Both</td>
+                              <td>Friends, Family</td>
+                          </tr>
+                           <tr>
+                              <td></td>
+                              <td>Bobby</td>
+                              <td>Taylors</td>
+                              <td>Both</td>
+                              <td>Friends, Family</td>
+                          </tr>
+ 
+                          </tbody>
+                        </table>
+
+                      </div>
+                  </div>
+                <div class="bottom" >
+                  <center>
+                    <span class="fa fa-2x fa-plus-circle"></span>
+                  </center>
+                </div>
+              </div>
+ 
                 </div>
               </div>
           </div>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row dashboard">
-        <div class="col-md-4 side-panel">
-          {% for event in events %}
-            <div class="panel-box">
-                <h2>{{ event.title }}</h2>
-                <div class="icon-number-box">
-                  <span class="fa fa-circle-o"></span>
-                  {{ event.invited }}
-                </div>
-                <div class="icon-number-box">
-                  <span class="fa fa-times-circle-o"></span>
-                  {{ event.attending }}
-                </div>
-                <div class="icon-number-box">
-                  <span class="fa fa-check-circle-o"></span>
-                  {{ event.not_attending }}
-                </div>
-            </div>
-          {% endfor %}
-            <div class="bottom" >
-                <center>
-                <span class="fa fa-4x fa-plus-circle"></span>
-                </center>
-            </div>
-        </div>
-
-        <div class="col-md-8 main-panel">
-           <!-- Invited Members -->    
-            <div class="header-box">
-                <h3>Barners and Noble on Dale Mabry</h3>
-                <p>Wed, Dec 21st, 2014 @ 12:30 PM</p>
-            </div>
-            <div class="large-panel">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <center>
-                                <h4>Invited</h4>
-                                <table class="table table-striped invited">
-                                  <tbody>
-                                    <tr>
-                                        <td><span class="fa fa-times-circle-o"></span>Alex Johnson</td>
-                                        <td>Friend</td>
-                                    </tr>
-                                    <tr>
-                                      <td><span class="fa fa-circle-o"></span>Michael Jordan</td>
-                                      <td>Family</td>
-                                    </tr>
-                                    <tr>
-                                      <td><span class="fa fa-check-circle-o"></span>Larry</td>
-                                      <td>Friend</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                            </center>
-                        </div>
-                        <div class="col-md-6">
-                        </div>
-                    </div>
-            </div>
-
-
-
-
-        </div>
       </div>
     </div>
 
