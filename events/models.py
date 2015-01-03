@@ -124,6 +124,21 @@ class Event(models.Model):
             return "false"
         return json.dumps(self.occurance)
 
+    @property
+    def to_json(self):
+        data = {
+            'pk': self.pk,
+            'title': self.title,
+            'event_date': str(self.event_date.strftime('%A %B %d, %Y %I:%M %p')),
+            'invite_date': str(self.invite_date.strftime(
+                '%A %B %d, %Y at %I:%M %p')),
+            'location': self.location,
+            'invited': self.invited,
+            'attending': self.attending,
+            'not_attending': self.not_attending,
+        }
+        return json.dumps(data)
+
     #################
     # EVENT MEMBERS #
     #################
@@ -165,6 +180,7 @@ class Member(models.Model):
                                null=True)
     zip = models.IntegerField(blank=True, null=True)
     preference = models.CharField(max_length=10, choices=PREFERENCE_CHOICES)
+    tags = models.CharField(max_length=255, blank=True, null=True)
 
     def __unicode__(self):
         return "{} {}".format(self.first_name, self.last_name)

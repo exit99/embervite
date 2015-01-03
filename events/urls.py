@@ -10,6 +10,7 @@ urlpatterns = patterns('events.views',
     url(r'^event/delete/(\d{1,6})/$', 'event_delete', name='event-delete'),
 
     url(r'^dashboard/$', 'event_dashboard', name='event-dashboard'),
+    url(r'^event-data/$', 'event_data', name='event-data'),
 
     url(r'^member/list/$', 'member_list', name='member-list'),
     url(r'^member/edit/(\d{1,6})/$', 'member_edit', name='member-edit'),

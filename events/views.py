@@ -224,7 +224,18 @@ def _update_event_member(unique_hash, attending):
 
 def event_dashboard(request):
     events = Event.objects.filter(user=request.user)
+    members = Member.objects.filter(user=request.user)
+
     context = {
         'events': events,
+        'members': members,
     }
     return render(request, 'events/dashboard.html', context)
+
+
+def event_data(request):
+    if request.method == "POST":
+        event = Event.objects.get(pk=request.POST.get('pk'))
+        if event.user == request.user:
+            return HttpResponse(event.to_json)
+    return HttpResponse(400)

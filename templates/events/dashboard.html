@@ -2,34 +2,38 @@
 {% load event_tags %}
 
 {% block head %}
+    <script type="application/javascript" src="/static/js/dashboard/app.js"></script>
+    <script type="application/javascript" src="/static/js/dashboard/controller.js"></script>
+    <script type="application/javascript" src="/static/js/dashboard/directive.js"></script>
 {% endblock  %}
 
 {% block body %}
-<div class="page-header">
+<div ng-app="dashboardApp">
+<div class="page-header" ng-controller="headerCtrl">
     <div class="container">
       <div class="row">
           <div class="col-md-9">
-            <h1>Book Club</h1>
-            <p>Wednesday Jan 2, 2015 @ Dale Mabry Library</p>
-            <p>Invites will be sent on Thursday Nov 23, 2015</p>
+              <h1>{$ event_data['title'] $}</h1>
+              <p>{$ event_data['event_date'] $} @ {$ event_data['location'] $}</p>
+              <p style="font-size: 18px">{$ checkInvitesSent() $}</p>
           </div>
           <div class="col-md-3">
             <div class="stats">
                 <center>
                   <span class="fa fa-4x fa-thumbs-up"></span><br>
-                  <span class="badge">10</span>
+                  <span class="badge">{$ event_data['attending'] $}</span>
                 </center>
             </div>
             <div class="stats">
                 <center>
                   <span class="fa fa-4x fa-thumbs-down"></span><br>
-                  <span class="badge">8</span>
+                  <span class="badge">{$ event_data['not_attending'] $}</span>
                 </center>
             </div>
             <div class="stats">
                 <center>
                   <span class="fa fa-4x fa-clock-o"></span><br>
-                  <span class="badge">18</span>
+                  <span class="badge">{$ event_data['invited'] - (event_data['attending'] + event_data['not_attending']) $}</span>
                 </center>
             </div>
           </div>
@@ -37,7 +41,7 @@
     </div>
 </div>
 
-    <div class="container filled">
+    <div class="container filled" ng-controller="eventCtrl">
       <div class="row">
           <div class="col-md-4">
               <div class="holder">
@@ -46,7 +50,7 @@
                     <table class="table table-hover table-striped invited">
                       <tbody>
                       {% for event in events %}
-                      <tr><td>{{ event.title }}<span class="fa fa-arrow-right"></span></tr></td>
+                      <tr{% if forloop.counter == 1 %} ng-init="initEvent({{ event.pk|escapejs}})"{% endif %} ng-click="event_pk = {{ event.pk|escapejs }}"><td>{{ event.title }}<span ng-hide="{{ event.pk|escapejs }} != event_pk" class="fa fa-arrow-right"></span></tr></td>
                       {% endfor %}
                       </tbody>
                     </table>
@@ -58,7 +62,7 @@
                 </div>
               </div>
           </div>
-          <div class="col-md-8">
+          <div class="col-md-8" ng-controller="guestListCtrl">
               <div class="holder">
                 <div class="text-holder guest-list">
                   <h5>Guest List</h5>
@@ -72,39 +76,20 @@
                                   <th>First Name</th>
                                   <th>Last Name</th>
                                   <th>Preference</th>
-                                  <th>Tags</th>
+                                  <th>Tag</th>
                               </tr>
                           </thead>
                           <tbody>
+                          {% for member in members %}
                           <tr>
                               <td><span class="fa fa-thumbs-up"></td>
-                              <td>Bobby</td>
-                              <td>Taylors</td>
-                              <td><span class="fa fa-envelope"></span></td>
-                              <td>Friends, Family</td>
+                              <td>{{ member.first_name }}</td>
+                              <td>{{ member.last_name }}</td>
+                              <td>{% if member.preference == "email" %}<span class="fa fa-envelope"></span>{% elif member.preference == "phone" %}<span style="font-size: 22px;" class="fa fa-mobile-phone"></span>{% else %}Both{% endif %}</td>
+                      {{ member.preference }}
+                              <td>{{ member.tags }}</td>
                           </tr>
-                          <tr>
-                              <td><span class="fa fa-clock-o"></td>
-                              <td>Bobby</td>
-                              <td>Taylors</td>
-                              <td><span class="fa fa-phone"></span></td>
-                              <td>Friends, Family</td>
-                          </tr>
-                           <tr>
-                              <td><span class="fa fa-thumbs-down"></td>
-                              <td>Bobby</td>
-                              <td>Taylors</td>
-                              <td>Both</td>
-                              <td>Friends, Family</td>
-                          </tr>
-                           <tr>
-                              <td></td>
-                              <td>Bobby</td>
-                              <td>Taylors</td>
-                              <td>Both</td>
-                              <td>Friends, Family</td>
-                          </tr>
- 
+                          {% endfor %}
                           </tbody>
                         </table>
 
@@ -122,6 +107,7 @@
           </div>
       </div>
     </div>
+</div>
 
       <hr>
 {% endblock %}
