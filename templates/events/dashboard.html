@@ -82,11 +82,14 @@
                           <tbody>
                           {% for member in members %}
                           <tr>
-                              <td><span class="fa fa-thumbs-up"></td>
+                              <td>
+                                  <span ng-show="checkStatus({{ member.pk|escapejs }}, true)" class="fa fa-thumbs-up"></span>
+                                  <span ng-show="checkStatus({{ member.pk|escapejs }}, false)" class="fa fa-thumbs-down"></span>
+                                  <span ng-show="checkStatus({{ member.pk|escapejs }}, null)" class="fa fa-clock-o"></span>
+                              </td>
                               <td>{{ member.first_name }}</td>
                               <td>{{ member.last_name }}</td>
                               <td>{% if member.preference == "email" %}<span class="fa fa-envelope"></span>{% elif member.preference == "phone" %}<span style="font-size: 22px;" class="fa fa-mobile-phone"></span>{% else %}Both{% endif %}</td>
-                      {{ member.preference }}
                               <td>{{ member.tags }}</td>
                           </tr>
                           {% endfor %}

@@ -246,6 +246,6 @@ def event_member_data(request):
         event = Event.objects.get(pk=request.POST.get('pk'))
         if event.user == request.user:
             ems = EventMember.objects.filter(event=event)
-            data = [{'pk':em.pk, 'attending': em.attending} for em in ems]
+            data = {em.member.pk: em.attending for em in ems}
             return HttpResponse(json.dumps(data))
     return HttpResponse(400)
